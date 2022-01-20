@@ -1,0 +1,19 @@
+import express from 'express'
+import dotenv from 'dotenv'
+import ApiRouter from './router/api.mjs'
+
+dotenv.config();
+const app = express();
+const PORT = process.env.APP_PORT
+const HOST = process.env.APP_HOST
+app.use(express.json())
+
+app.use('/api', ApiRouter)
+app.use('/', (req, res) => {
+    res.send('hellos')
+})
+
+
+app.listen(PORT, () => {
+  console.log(`App listening at http://${HOST}:${PORT}`)
+});
