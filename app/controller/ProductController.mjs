@@ -40,7 +40,7 @@ const ProductController = {
                 // ErrorLog('Fetching product detail', `Invalid product : ${data1688.message}`, req.params.id)
                 return res.status(200).json({
                     status:false,
-                    message:'Invalid product or Product has removed'
+                    message:'Invalid product from 1688 or Product has removed'
                 })
             }
 
@@ -49,7 +49,6 @@ const ProductController = {
             const idrRate =  rateArr.find(x => x.label === 'CNY')
             const rate = idrRate.rate_markup
             const convert = new ConvertProduct(data1688)
-
             if (!dataLocal) {
                 const converted = await convert.mapping()
                 await service.store(converted)
@@ -65,10 +64,6 @@ const ProductController = {
                 message:typeof isCopyLink !== 'undefined' ? dataLocal.uuid : convert.convertPrice(dataLocal, rate)
             })
 
-
-            const converted2 = await convert.mapping()
-            await service.store(converted2)
-
             const regetProduct = await repo.mysqlByProductId(productId)
 
             return res.status(200).json({
@@ -76,6 +71,7 @@ const ProductController = {
                 message:typeof isCopyLink !== 'undefined' ? regetProduct.uuid : regetProduct
             })
         } catch (error) {
+            throw error
             // ErrorLog('Fetching product detail', `${error.name}: ${error.message}`, req.params.id)
             res.send({
                 status:false,

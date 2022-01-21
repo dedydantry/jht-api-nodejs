@@ -70,7 +70,7 @@ class Service1688 {
 
     async store (product) {
         try {
-            const url = `${process.env.LARAVEL_HOST  }/api/1688`
+            const url = `${process.env.LARAVEL_HOST}/api/1688`
             const gets = await fetch(url, {
                 method: 'POST',
                 headers: {
@@ -82,6 +82,7 @@ class Service1688 {
             const response = await gets.json()
             return response
         } catch (error) {
+            throw error
             return {
                 status:false,
                 data:error.message

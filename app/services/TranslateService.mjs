@@ -1,41 +1,26 @@
 import fetch from 'node-fetch'
+import { v4 as uuidv4 } from 'uuid'
 import dotenv from 'dotenv'
 dotenv.config()
 
 export default class TranslateService {
 
-    // constructor(){
-    //     const token = this.getTokenAzure()
-    //     this.token = token
-    // }
-
-    getTokenAzure(){
-        return new Promise((resolve, reject) => {
-            fetch(`https://southeastasia.api.cognitive.microsoft.com/sts/v1.0/issueToken?Subscription-Key=${process.env.AZURE_TRANSLATE_KEY}`, {
-                method:'POST',
-                headers:{
-                    'Content-Length': 0,
-                    "Host": "southeastasia.api.cognitive.microsoft.com"
-                }
-            })
-            .then(res => res.text())
-            .then(res => {
-                return resolve(res)
-            })
-            .catch(err => resolve(''))
-        })
+    constructor(){
+        this.subscriptionKey = process.env.AZURE_TRANSLATE_KEY
+        this.endpoint = process.env.AZURE_ENDPOINT
+        this.region = process.env.AZURE_REGION
     }
 
-    translate(token, to, text){
-        if(!text || !token ) return ''
+    translate(text, target='en'){
 
         return new Promise((resolve, reject) => {
             const params = [{text:text}]
-            fetch(`https://api.cognitive.microsofttranslator.com/translate?api-version=3.0&to=${to}&plain=plain`, {
+            fetch(`${this.endpoint}/translate?api-version=${encodeURIComponent('3.0')}&from=zh&to=${encodeURIComponent(target)}`, {
                 headers:{
-                    'Authorization': 'Bearer ' + token,
+                    'Ocp-Apim-Subscription-Key': this.subscriptionKey,
+                    'Ocp-Apim-Subscription-Region': this.region,
                     'Content-type': 'application/json',
-                    'cache-control': 'no-cache'
+                    'X-ClientTraceId': uuidv4().toString()
                 },
                 body:JSON.stringify(params),
                 method:'POST',
@@ -43,7 +28,6 @@ export default class TranslateService {
             })
             .then(res => res.json())
             .then(res => {
-                console.log(res)
                 resolve(res[0].translations[0].text)
             })
             .catch(err => reject(err))

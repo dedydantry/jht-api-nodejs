@@ -8,12 +8,9 @@ class ConvertProduct extends TranslateService {
         super()
         this.masterData  = productData.productInfo
         this.variantType = 'no_variant'
-        this.azureToken = ''
     }
 
     async mapping () {
-        this.azureToken = await this.getTokenAzure()
-
         const masterCategory = this.finCategory()
         const firstCategory = masterCategory[masterCategory.length - 1].name
         const parentCategory = masterCategory
@@ -56,12 +53,11 @@ class ConvertProduct extends TranslateService {
             seller_address:this.masterData.shippingInfo.sendGoodsAddressText,
             description:this.masterData.description
         }
-        
+
         // handling translate all
         try {
             const translateAll = await Promise.all([
                 this.translateTitleCategory(`${this.masterData.subject} - ${firstCategory}`),
-                this.translateAtribute(productResult),
                 this.translateVariant(productResult)
             ])
     
@@ -71,11 +67,10 @@ class ConvertProduct extends TranslateService {
                 productResult.category.name_en = cat
             }
     
-            productResult = this.appendStringAttribute(productResult, translateAll[1])
-            productResult = this.appendVariant(productResult, translateAll[2])
+            productResult = this.appendVariant(productResult, translateAll[1])
 
         } catch (error) {
-            
+            throw error
         }
 
         return productResult
@@ -215,7 +210,7 @@ class ConvertProduct extends TranslateService {
     // translate
     async translateTitleCategory (str) {
         try {
-            const title = await this.translate(this.azureToken, 'en', str)
+            const title = await this.translate(str)
             return title
         } catch (error) {
             return ''
@@ -227,7 +222,7 @@ class ConvertProduct extends TranslateService {
             const attrString = params.attributes.map(x => {
                 return `${x.name_cn} - ${x.value_cn}`
             }).join(' | ')
-            const resultTranslate = await this.translate(this.azureToken, 'en', attrString)
+            const resultTranslate = await this.translate(attrString)
             const arrResult = resultTranslate.split(' | ')
             return arrResult
         } catch (error) {
@@ -246,28 +241,28 @@ class ConvertProduct extends TranslateService {
     }
 
     async translateVariant (params) {
-        if (!params.variant.length) return params
+        if (!params.variants.length) return params
 
         let variantString = ''
         if (params.variant_type == 'multiple_item') {
-            variantString = params.variant.map(x => {
+            variantString = params.variants.map(x => {
                 const itemString = x.items.map(y => {
                     return y.name
                 }).join(' >> ')
                 return `${x.name} <> ${itemString}`
             }).join(' << ')
 
-            const resultTranslate = await this.translate(this.azureToken, 'en', variantString)
-            const arrResult = resultTranslate.split(' << ')
-            return arrResult
            
+            const resultTranslate = await this.translate(variantString)
+            if(resultTranslate) return resultTranslate.split(' << ')
+            return variantString.split(' << ')
 
         } else if (params.variant_type === 'single_item') {
-            const singleItemString = params.variant.map(x => {
+            const singleItemString = params.variants.map(x => {
                 return x.name
             }).join(' << ')
 
-            const resultSingleTranslate = await this.translate(this.azureToken, 'en', singleItemString)
+            const resultSingleTranslate = await this.translate(singleItemString)
             const arrResultSingle = resultSingleTranslate.split(' << ')
             return arrResultSingle
         }
@@ -279,15 +274,21 @@ class ConvertProduct extends TranslateService {
         if (params.variant_type == 'multiple_item') {
             arg.map((x, index) => {
                 const [name, itemString] = x.split(' <> ')
-                params.variant[index].name_en = name
-                const arrItemString = itemString.split(' >> ')
-                arrItemString.map((q, i) => {
-                    params.variant[index].items[i].name_en = q
-                })
+                params.variants[index].name_en = name
+                if(typeof itemString !== 'undefined'){
+                    if(itemString.search('>>') >= 0){
+                        const arrItemString = itemString.split(' >> ')
+                        arrItemString.map((q, i) => {
+                            params.variants[index].items[i].name_en = q
+                        })
+                    }else{
+                        params.variants[index].items[0].name_en = itemString
+                    }
+                }
             })
         } else if (params.variant_type === 'single_item') {
             arg.map((x, index) => {
-                params.variant[index].name_en = x
+                params.variants[index].name_en = x
             })
         }
 
