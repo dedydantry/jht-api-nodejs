@@ -40,7 +40,7 @@ const ProductController = {
                 // ErrorLog('Fetching product detail', `Invalid product : ${data1688.message}`, req.params.id)
                 return res.status(200).json({
                     status:false,
-                    message: typeof data1688.message != 'undefined' ? data1688.message : 'Invalid product from 1688 or Product has removed'
+                    message: data1688//typeof data1688.message != 'undefined' ? data1688.message : 'Invalid product from 1688 or Product has removed'
                 })
             }
 
