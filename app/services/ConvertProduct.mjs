@@ -24,6 +24,7 @@ class ConvertProduct extends TranslateService {
                 cn:this.masterData.subject
             },
             prices:this.findPrice(),
+            stock:typeof this.masterData.saleInfo.amountOnSale  !== 'undefined' ? this.masterData.saleInfo.amountOnSale : null,
             moq:this.masterData.saleInfo.minOrderQuantity,
             images:this.masterData.image.images.map(x => `https://cbu01.alicdn.com/${x}`),
             category:{
