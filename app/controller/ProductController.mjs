@@ -40,7 +40,7 @@ const ProductController = {
                 // ErrorLog('Fetching product detail', `Invalid product : ${data1688.message}`, req.params.id)
                 return res.status(200).json({
                     status:false,
-                    message:'Invalid product from 1688 or Product has removed'
+                    message: typeof data1688.message != 'undefined' ? data1688.message : 'Invalid product from 1688 or Product has removed'
                 })
             }
 
@@ -71,7 +71,6 @@ const ProductController = {
                 message:typeof isCopyLink !== 'undefined' ? regetProduct.uuid : regetProduct
             })
         } catch (error) {
-            throw error
             // ErrorLog('Fetching product detail', `${error.name}: ${error.message}`, req.params.id)
             res.send({
                 status:false,

@@ -82,7 +82,6 @@ class Service1688 {
             const response = await gets.json()
             return response
         } catch (error) {
-            throw error
             return {
                 status:false,
                 data:error.message
