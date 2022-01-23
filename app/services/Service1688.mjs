@@ -98,10 +98,8 @@ class Service1688 {
             
             querySignature._aop_signature   = signature.signature
             querySignature.access_token = signature.access_token
-            // return signature.data;
             const params = new URLSearchParams(querySignature)
             const str = params.toString()
-            // return str
 
             const res = await this.fetching(signature.path, str)
             return res
