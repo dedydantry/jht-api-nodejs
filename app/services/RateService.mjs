@@ -25,7 +25,7 @@ class RateService {
             return {
                 label:x,
                 rate:r,
-                rate_markup:r * 0.04
+                rate_markup:r + (r + 0.04)
             }
         })
 
