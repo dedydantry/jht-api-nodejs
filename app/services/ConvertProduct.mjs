@@ -272,7 +272,7 @@ class ConvertProduct extends TranslateService {
 
         return ''        
     }
-    // http://localhost:3001/api/product/622793501102?copy=true
+    
     appendVariant (params, arg) {
         if (params.variant_type == 'multiple_item') {
             arg.map((x, index) => {
