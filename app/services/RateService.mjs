@@ -4,33 +4,43 @@ const myCache = new NodeCache();
 class RateService {
 
     async run(){
-        const cacheRate = myCache.get("rates");
-
-        if(typeof cacheRate !== 'undefined') {
-            const getRates = JSON.parse(cacheRate)
-            return getRates
-        }
-
-        const arrCurrency = ['USD', 'CNY','PHP','MYR','THB','SGD']
-        const prAll = []
-
-        for (let index = 0; index < arrCurrency.length; index++) {
-            const f = this.fetching(arrCurrency[index])
-            prAll.push(f)
-        }
-
-        const result = await Promise.all(prAll)
-        const params = arrCurrency.map((x,index) => {
-            const r = result[index].rate
-            return {
-                label:x,
-                rate:r,
-                rate_markup:r + (r + 0.04)
+        try {
+            const cacheRate = myCache.get("rates");
+    
+            if(typeof cacheRate !== 'undefined') {
+                const getRates = JSON.parse(cacheRate)
+                return getRates
             }
-        })
-
-        myCache.set('rates', JSON.stringify(params), 7200)
-        return params
+    
+            const arrCurrency = ['USD', 'CNY','PHP','MYR','THB','SGD']
+            const prAll = []
+    
+            for (let index = 0; index < arrCurrency.length; index++) {
+                const f = this.fetching(arrCurrency[index])
+                prAll.push(f)
+            }
+    
+            const result = await Promise.all(prAll)
+            const params = arrCurrency.map((x,index) => {
+                const r = result[index].rate
+                return {
+                    label:x,
+                    rate:r,
+                    rate_markup:r + (r * 0.04)
+                }
+            })
+    
+            myCache.set('rates', JSON.stringify(params), 7200)
+            return params
+        } catch (error) {
+            return[
+                {
+                    label:'CNY',
+                    rate:2260,
+                    rate_markup:2260 + (2260 * 0.04)
+                }
+            ]
+        }
     }
 
     fetching(from, to ='IDR'){

@@ -63,7 +63,6 @@ const ProductController = {
                 status:true,
                 message:typeof isCopyLink !== 'undefined' ? dataLocal.uuid : convert.convertPrice(dataLocal, rate)
             })
-
             const regetProduct = await repo.mysqlByProductId(productId)
 
             return res.status(200).json({
