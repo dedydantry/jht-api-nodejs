@@ -252,13 +252,13 @@ class ConvertProduct extends TranslateService {
                 const itemString = x.items.map(y => {
                     return y.name
                 }).join(' >> ')
-                return `${x.name} <> ${itemString}`
-            }).join(' << ')
+                return `${x.name} @@ ${itemString}`
+            }).join(' || ')
 
            
             const resultTranslate = await this.translate(variantString)
-            if(resultTranslate) return resultTranslate.split(' << ')
-            return variantString.split(' << ')
+            if(resultTranslate) return resultTranslate.split(' || ')
+            return variantString.split(' || ')
 
         } else if (params.variant_type === 'single_item') {
             const singleItemString = params.variants.map(x => {
@@ -272,11 +272,11 @@ class ConvertProduct extends TranslateService {
 
         return ''        
     }
-
+    // http://localhost:3001/api/product/622793501102?copy=true
     appendVariant (params, arg) {
         if (params.variant_type == 'multiple_item') {
             arg.map((x, index) => {
-                const [name, itemString] = x.split(' <> ')
+                const [name, itemString] = x.split(' @@ ')
                 params.variants[index].name_en = name
                 if(typeof itemString !== 'undefined'){
                     if(itemString.search('>>') >= 0){
