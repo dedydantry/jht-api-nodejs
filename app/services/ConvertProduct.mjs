@@ -263,16 +263,16 @@ class ConvertProduct extends TranslateService {
         } else if (params.variant_type === 'single_item') {
             const singleItemString = params.variants.map(x => {
                 return x.name
-            }).join(' << ')
+            }).join(' || ')
 
             const resultSingleTranslate = await this.translate(singleItemString)
-            const arrResultSingle = resultSingleTranslate.split(' << ')
+            const arrResultSingle = resultSingleTranslate.split(' || ')
             return arrResultSingle
         }
 
         return ''        
     }
-    
+
     appendVariant (params, arg) {
         if (params.variant_type == 'multiple_item') {
             arg.map((x, index) => {
