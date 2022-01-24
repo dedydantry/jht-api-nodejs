@@ -68,7 +68,7 @@ const ProductController = {
 
             return res.status(200).json({
                 status:true,
-                message:typeof isCopyLink !== 'undefined' ? regetProduct.uuid : regetProduct
+                message:typeof isCopyLink !== 'undefined' ? regetProduct.uuid : convert.convertPrice(regetProduct, rate)
             })
         } catch (error) {
             // ErrorLog('Fetching product detail', `${error.name}: ${error.message}`, req.params.id)
