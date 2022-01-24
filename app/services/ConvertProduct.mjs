@@ -11,7 +11,7 @@ class ConvertProduct extends TranslateService {
     }
 
     async mapping () {
-        const masterCategory = this.finCategory()
+        const masterCategory = this.findCategory()
         const firstCategory = masterCategory[masterCategory.length - 1].name
         const parentCategory = masterCategory
         const variant = this.findVariant()
@@ -28,7 +28,7 @@ class ConvertProduct extends TranslateService {
             moq:this.masterData.saleInfo.minOrderQuantity,
             images:this.masterData.image.images.map(x => `https://cbu01.alicdn.com/${x}`),
             category:{
-                name_cn:firstCategory,
+                name_cn:firstCategory ,
                 name_en:'',
                 id:this.masterData.categoryID,
                 group:parentCategory
@@ -66,6 +66,7 @@ class ConvertProduct extends TranslateService {
                 const [title, cat] = translateAll[0].split(' - ')
                 productResult.subject.en = title
                 productResult.category.name_en = cat
+                productResult.category.group[0].name_en = cat
             }
     
             productResult = this.appendVariant(productResult, translateAll[1])
@@ -161,13 +162,14 @@ class ConvertProduct extends TranslateService {
     }
 
 
-    finCategory () {
+    findCategory () {
         const category = this.masterData.categoryName.split('/')
-        return category.map(x => {
+        return category.map((x, index) => {
             return {
                 uuid:uuidv4(),
                 name:x,
-                name_en:null
+                name_en:null,
+                category_id_1688: !index ? this.masterData.categoryID : null
             }
         })
     }
