@@ -21,7 +21,7 @@ const ProductController = {
                 productId = uuid
             } else {
                 const findByUuid = await repo.findProductByUuid(uuid)
-                if (findByUuid === null) return res.status(200).json({
+                if (!findByUuid) return res.status(200).json({
                     status:false,
                     message:'Invalid product or Product has removed'
                 })
