@@ -17,10 +17,19 @@ export default class ProductRepository {
             const product = await Product.select(['id', 'uuid', 'product_id_1688'])
             .where('uuid', uuid)
             .first()
-            if (!product) return  null
-            return product.toJSON()
+            if (!product) return {
+                status:false,
+                data:findByUuid
+            }
+            return {
+                status:true,
+                data:product.toJSON()
+            }
         } catch (error) {
-            return null
+            return {
+                status:false,
+                data:error.message
+            }
         }
     }
 }

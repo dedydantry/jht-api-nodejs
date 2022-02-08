@@ -21,20 +21,22 @@ const ProductController = {
                 productId = uuid
             } else {
                 const findByUuid = await repo.findProductByUuid(uuid)
-                if (!findByUuid) return res.status(200).json({
+                if (!findByUuid.status) return res.status(200).json({
                     status:false,
-                    message:'Invalid product or Product has removed'
+                    message:findByUuid.data,
                 })
-                productId = findByUuid.product_id_1688
+                productId = findByUuid.data.product_id_1688
             }
 
             const service = new Service1688(productId)
-            await service.buildRelation(productId)
-
+            const c = await service.buildRelation(productId)
+            console.log(c, 'cccs');
             let [data1688, dataLocal] = await Promise.all([
                 service.productDetail(productId),
                 repo.mysqlByProductId(productId)
             ])
+
+            console.log(data1688, 'data');
 
             if (!data1688.success) {
                 // ErrorLog('Fetching product detail', `Invalid product : ${data1688.message}`, req.params.id)
