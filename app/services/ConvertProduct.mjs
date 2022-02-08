@@ -1,5 +1,4 @@
 import _ from 'lodash'
-import { v4 as uuidv4 } from 'uuid'
 import TranslateService from './TranslateService.mjs'
 
 class ConvertProduct extends TranslateService {
@@ -166,12 +165,11 @@ class ConvertProduct extends TranslateService {
         const category = this.masterData.categoryName.split('/')
         return category.map((x, index) => {
             return {
-                uuid:uuidv4(),
                 name:x,
                 name_en:null,
                 category_id_1688: !index ? this.masterData.categoryID : null
             }
-        })
+        }).filter(x => x.category_id_1688 !== null)
     }
 
     findPrice () {
