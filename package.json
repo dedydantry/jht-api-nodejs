@@ -26,5 +26,8 @@
     "node-cache": "^5.1.2",
     "node-fetch": "^2.6.1",
     "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "mysql2": "^2.3.3"
   }
 }

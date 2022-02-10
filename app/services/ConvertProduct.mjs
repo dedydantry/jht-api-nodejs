@@ -91,6 +91,7 @@ class ConvertProduct extends TranslateService {
     }
 
     findVariant () {
+        console.log(this.masterData.skuInfos, 'pol');
         if (typeof this.masterData.skuInfos === 'undefined') return []
         const items = this.masterData.skuInfos.filter(x => x.amountOnSale > 0)
         let isMultiple = true
@@ -250,7 +251,7 @@ class ConvertProduct extends TranslateService {
                 const itemString = x.items.map(y => {
                     return y.name
                 }).join(' >> ')
-                return `${x.name} @@ ${itemString}`
+                return `${x.name} 7D7 ${itemString}`
             }).join(' || ')
 
            
@@ -274,7 +275,7 @@ class ConvertProduct extends TranslateService {
     appendVariant (params, arg) {
         if (params.variant_type == 'multiple_item') {
             arg.map((x, index) => {
-                const [name, itemString] = x.split(' @@ ')
+                const [name, itemString] = x.split(' 7D7 ')
                 params.variants[index].name_en = name
                 if(typeof itemString !== 'undefined'){
                     if(itemString.search('>>') >= 0){

@@ -36,7 +36,7 @@ const ProductController = {
                 repo.mysqlByProductId(productId)
             ])
 
-            console.log(data1688, 'data');
+            // console.log(data1688, 'data');
 
             if (!data1688.success) {
                 // ErrorLog('Fetching product detail', `Invalid product : ${data1688.message}`, req.params.id)
