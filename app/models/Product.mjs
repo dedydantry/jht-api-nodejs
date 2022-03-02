@@ -6,11 +6,13 @@ import ProductAttribute from './ProductAttribute.mjs'
 import ProductImage from './ProductImage.mjs'
 import ProductNote from './ProductNote.mjs'
 import PriceRange from './PriceRange.mjs'
+import ProductKeyword from './ProductKeyword.mjs'
 
 const Product = DB.model('Product', {
     hasTimestamps: ['created_at', 'updated_at'],
     tableName : 'products',
     idAttribute : 'id',
+    soft: true,
 
     category () {
         return this.belongsTo(Category)
@@ -38,6 +40,10 @@ const Product = DB.model('Product', {
 
     ranges () {
         return this.hasMany(PriceRange)
+    },
+
+    keyword(){
+        return this.hasMany(ProductKeyword)
     }
 })
 

@@ -91,7 +91,6 @@ class ConvertProduct extends TranslateService {
     }
 
     findVariant () {
-        console.log(this.masterData.skuInfos, 'pol');
         if (typeof this.masterData.skuInfos === 'undefined') return []
         const items = this.masterData.skuInfos.filter(x => x.amountOnSale > 0)
         let isMultiple = true

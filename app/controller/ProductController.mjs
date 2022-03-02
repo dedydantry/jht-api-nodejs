@@ -30,7 +30,6 @@ const ProductController = {
 
             const service = new Service1688(productId)
             const c = await service.buildRelation(productId)
-            console.log(c, 'cccs');
             let [data1688, dataLocal] = await Promise.all([
                 service.productDetail(productId),
                 repo.mysqlByProductId(productId)
@@ -72,6 +71,7 @@ const ProductController = {
                 message:typeof isCopyLink !== 'undefined' ? regetProduct.uuid : convert.convertPrice(regetProduct, rate)
             })
         } catch (error) {
+            // throw error
             // ErrorLog('Fetching product detail', `${error.name}: ${error.message}`, req.params.id)
             res.send({
                 status:false,

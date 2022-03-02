@@ -3,11 +3,12 @@ export default class ProductRepository {
 
     async mysqlByProductId (productId) {
         try {
-            const product = await Product.with(['category', 'ranges', 'images', 'variants.items', 'attributess', 'note', 'seller'])
+            const product = await Product.with(['category', 'ranges', 'images', 'variants.items', 'attributess', 'note', 'seller', 'keyword'])
                 .where('product_id_1688', productId).first()
             if (!product) return  null
             return product.toJSON()
         } catch (error) {
+            throw error
             return null
         }
     }
@@ -19,7 +20,7 @@ export default class ProductRepository {
             .first()
             if (!product) return {
                 status:false,
-                data:findByUuid
+                data:product
             }
             return {
                 status:true,
