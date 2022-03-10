@@ -26,7 +26,7 @@ class RateService {
                 return {
                     label:x,
                     rate:r,
-                    rate_markup:r + (r * 0.04)
+                    rate_markup:r + (r * 0.05)
                 }
             })
     
@@ -37,7 +37,7 @@ class RateService {
                 {
                     label:'CNY',
                     rate:2260,
-                    rate_markup:2260 + (2260 * 0.04)
+                    rate_markup:2260 + (2260 * 0.05)
                 }
             ]
         }
