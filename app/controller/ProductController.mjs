@@ -35,20 +35,26 @@ const ProductController = {
                 repo.mysqlByProductId(productId)
             ])
 
-            // console.log(data1688, 'data');
+            const rateService = new RateService()
+            const rateArr = await rateService.run()
+            const idrRate =  rateArr.find(x => x.label === 'CNY')
+            const rate = idrRate.rate_markup
 
             if (!data1688.success) {
                 // ErrorLog('Fetching product detail', `Invalid product : ${data1688.message}`, req.params.id)
+                if(data1688.error_code == 'gw.QosAppFrequencyLimit' && dataLocal) {
+                    const cvrt = new ConvertProduct(data1688)
+                    return res.status(200).json({
+                        status:true,
+                        message: cvrt.convertPrice(dataLocal, rate)
+                    })
+                }
                 return res.status(200).json({
                     status:false,
                     message: data1688//typeof data1688.message != 'undefined' ? data1688.message : 'Invalid product from 1688 or Product has removed'
                 })
             }
 
-            const rateService = new RateService()
-            const rateArr = await rateService.run()
-            const idrRate =  rateArr.find(x => x.label === 'CNY')
-            const rate = idrRate.rate_markup
             const convert = new ConvertProduct(data1688)
             if (!dataLocal) {
                 const converted = await convert.mapping()
@@ -71,7 +77,6 @@ const ProductController = {
                 message:typeof isCopyLink !== 'undefined' ? regetProduct.uuid : convert.convertPrice(regetProduct, rate)
             })
         } catch (error) {
-            // throw error
             // ErrorLog('Fetching product detail', `${error.name}: ${error.message}`, req.params.id)
             res.send({
                 status:false,
