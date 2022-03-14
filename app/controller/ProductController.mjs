@@ -40,9 +40,9 @@ const ProductController = {
             const idrRate =  rateArr.find(x => x.label === 'CNY')
             const rate = idrRate.rate_markup
 
-            if (!data1688.success) {
+            if (!data1688.success || typeof data1688.error_message !== 'undefined') {
                 // ErrorLog('Fetching product detail', `Invalid product : ${data1688.message}`, req.params.id)
-                if(data1688.error_code == 'gw.QosAppFrequencyLimit' && dataLocal) {
+                if((data1688.error_code == 'gw.QosAppFrequencyLimit' || data1688.error_code == 'gw.SignatureInvalid') && dataLocal) {
                     const cvrt = new ConvertProduct(data1688)
                     return res.status(200).json({
                         status:true,
@@ -77,6 +77,7 @@ const ProductController = {
                 message:typeof isCopyLink !== 'undefined' ? regetProduct.uuid : convert.convertPrice(regetProduct, rate)
             })
         } catch (error) {
+            throw error
             // ErrorLog('Fetching product detail', `${error.name}: ${error.message}`, req.params.id)
             res.send({
                 status:false,
