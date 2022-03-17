@@ -35,6 +35,7 @@ const ProductController = {
                 repo.mysqlByProductId(productId)
             ])
 
+
             const rateService = new RateService()
             const rateArr = await rateService.run()
             const idrRate =  rateArr.find(x => x.label === 'CNY')

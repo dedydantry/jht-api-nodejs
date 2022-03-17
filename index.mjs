@@ -11,9 +11,9 @@ app.use(cors())
 app.use(express.json())
 
 app.use('/api', ApiRouter)
-app.use('/', (req, res) => {
-    res.send('hellos')
-})
+// app.use('/', (req, res) => {
+//     res.send('hellos')
+// })
 
 
 app.listen(PORT, () => {
