@@ -4,7 +4,7 @@ dotenv.config()
 
 try {
    mongoose
-    .connect(`mongodb://cr_user:${encodeURIComponent('qwerty#123123#')}@8.215.28.69:27017/caribarang_mg`, {
+    .connect(`mongodb://${process.env.MONGO_NAME}:${encodeURIComponent(process.env.MONGO_NAME)}@8.215.28.69:27017/${process.env.MONGO_DB}`, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useNewUrlParser:true
