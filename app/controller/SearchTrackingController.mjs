@@ -4,9 +4,15 @@ const SearchTrackingController = {
     async index(req, res){
         try {
             const log = await SearchLog.find({})
-            return res.send(log)
+            return res.send({
+                status:true,
+                data:log
+            })
         } catch (error) {
-            throw error
+            return res.send({
+                status:false,
+                data:error.message
+            })
         }
     },
 
@@ -17,10 +23,10 @@ const SearchTrackingController = {
                 user_id:req.body.user_id,
                 keyword:keyword,
             })
-            await log.save()
-            return res.send(log)
+            log.save()
+            return res.send({success:true})
         } catch (error) {
-            res.send(error.message)
+            return res.send({success:false})
         }
     }
 
