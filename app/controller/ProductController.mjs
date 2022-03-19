@@ -96,7 +96,6 @@ const ProductController = {
                 message:search,
             })
         } catch (error) {
-            throw error
             return res.send(error.message)
         }
     }
