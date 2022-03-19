@@ -56,7 +56,11 @@ class Service1688 {
 
         try {
             const url = `${process.env.LARAVEL_HOST}/api/1688/signature?product_id=${productId}&path=${path}&type=${type}`
-            const gets = await fetch(url)
+            const gets = await fetch(url,{
+                headers:{
+                    contentType: "application/json; charset=utf-8",
+                }
+            })
             const response = await gets.json()
             return response
         } catch (error) {
@@ -109,6 +113,26 @@ class Service1688 {
                 data:error.message
             }
         }
+    }
+
+    async search(keyword = '') {
+        try {
+            const path = 'param2/1/com.alibaba.product/alibaba.product.suggest.crossBorder'
+            const querySignature   = { 'keyWord': keyword}
+            const signature = await this.getSignature(decodeURIComponent(keyword), path, 'search')
+            querySignature._aop_signature   = signature.signature
+            querySignature.access_token = signature.access_token
+            const params = new URLSearchParams(querySignature)
+            const str = params.toString()
+            const res = await this.fetching(signature.path, str)
+            return res
+        } catch (error) {
+            return{
+                success:false,
+                data:error.message
+            }
+        }
+       
     }
 }
 

@@ -2,7 +2,6 @@ import SearchLog from '../models/mongo/SearchLog.mjs'
 const SearchTrackingController = {
 
     async index(req, res){
-        console.log('sksk');
         try {
             const log = await SearchLog.find({})
             return res.send(log)

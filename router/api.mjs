@@ -9,6 +9,7 @@ api.get('/', (req, res) => {
 })
 
 api.get('/product', ProductController.index)
+api.post('/search', ProductController.search)
 api.get('/product/:id', ProductController.view)
 
 api.get('/track-search', SearchTrackingController.index)

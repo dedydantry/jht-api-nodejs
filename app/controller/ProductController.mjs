@@ -84,6 +84,21 @@ const ProductController = {
                 message:error.message
             })
         }
+    },
+
+    async search(req, res){
+        try {
+            const keyword = req.body.keyword
+            const service = new Service1688('')
+            const search = await service.search(keyword)
+            res.status(200).json({
+                status:false,
+                message:search,
+            })
+        } catch (error) {
+            throw error
+            return res.send(error.message)
+        }
     }
 
 }
