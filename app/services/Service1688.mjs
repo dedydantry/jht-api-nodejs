@@ -1,5 +1,8 @@
 import fetch from 'node-fetch'
 import dotenv from 'dotenv'
+import { v4 as uuidv4 } from 'uuid';
+import TranslateService from './TranslateService.mjs';
+import { format } from 'date-fns'
 dotenv.config()
 class Service1688 {
 
@@ -93,6 +96,27 @@ class Service1688 {
         }
     }
 
+    async storeSuggest(params){
+        try {
+            const url = `${process.env.LARAVEL_HOST}/api/1688/suggest`
+            const gets = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                  },
+                body: JSON.stringify(params)
+            })
+            const response = await gets.json()
+            return response
+        } catch (error) {
+            return {
+                status:false,
+                data:error.message
+            }
+        }
+    }
+
     async productDetail () {
         try {
             const path = 'param2/1/com.alibaba.product/alibaba.cross.productInfo'
@@ -118,6 +142,10 @@ class Service1688 {
     async search(keyword = '') {
         try {
             const path = 'param2/1/com.alibaba.product/alibaba.product.suggest.crossBorder'
+            const translate = new TranslateService();
+            const keywordOri = keyword
+            keyword = await translate.translate(keyword, 'en', 'id')
+            if(!keyword) return {status:false,data:[]}
             const querySignature   = { 'keyWord': keyword}
             const signature = await this.getSignature(decodeURIComponent(keyword), path, 'search')
             querySignature._aop_signature   = signature.signature
@@ -125,7 +153,54 @@ class Service1688 {
             const params = new URLSearchParams(querySignature)
             const str = params.toString()
             const res = await this.fetching(signature.path, str)
-            return res
+            if(typeof res.resultList !== 'undefined'){
+                const result =  res.resultList.map(x => {
+                    return {
+                        seller_id : null,
+                        category_id :null,
+                        subcategory_id : null,
+                        category_id_1688 :null,
+                        product_id_1688 :x.productID,
+                        uuid : uuidv4(),
+                        name : x.subject,
+                        name_en :'',
+                        price :x.price,
+                        price_type :'FIX',
+                        stock :x.amountOnSale,
+                        moq : x.minPurchaseQuantity ?  x.minPurchaseQuantity : 1,
+                        cover :x.picUrl,
+                        weight :0,
+                        height :0,
+                        length :0,
+                        variant_type :'no_variant',
+                        last_updated : '-',
+                        created_at:format(new Date(), 'yyyy-MM-dd hh:ii:ss')
+                    }
+                })
+
+                const longTitle =  result.map(x => x.name).join(' || ')
+                const arrTitle =  await translate.translate(longTitle)
+                if(arrTitle){
+                    const resultTranslate = arrTitle.split(' || ')
+                    for (let index = 0; index < resultTranslate.length; index++) {
+                        result[index].name_en = resultTranslate[index]
+                    }
+                }
+                
+                this.storeSuggest({
+                    product:result,
+                    keyword: keywordOri + ',' + keyword
+                })
+
+                return {
+                    status:true,
+                    data:result
+                }
+            }
+            return {
+                status:false,
+                data:res
+            }
         } catch (error) {
             return{
                 success:false,

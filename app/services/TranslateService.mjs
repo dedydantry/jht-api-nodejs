@@ -11,11 +11,10 @@ export default class TranslateService {
         this.region = process.env.AZURE_REGION
     }
 
-    translate(text, target='en'){
-
+    translate(text, target='en', from = 'zh'){
         return new Promise((resolve, reject) => {
             const params = [{text:text}]
-            fetch(`${this.endpoint}/translate?api-version=${encodeURIComponent('3.0')}&from=zh&to=${encodeURIComponent(target)}`, {
+            fetch(`${this.endpoint}/translate?api-version=${encodeURIComponent('3.0')}&from=${from}&to=${encodeURIComponent(target)}`, {
                 headers:{
                     'Ocp-Apim-Subscription-Key': this.subscriptionKey,
                     'Ocp-Apim-Subscription-Region': this.region,
@@ -30,7 +29,7 @@ export default class TranslateService {
             .then(res => {
                 resolve(res[0].translations[0].text)
             })
-            .catch(err => reject(err))
+            .catch(err => resolve(''))
         })
     }
 }

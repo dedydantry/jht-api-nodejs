@@ -35,7 +35,6 @@ const ProductController = {
                 repo.mysqlByProductId(productId)
             ])
 
-
             const rateService = new RateService()
             const rateArr = await rateService.run()
             const idrRate =  rateArr.find(x => x.label === 'CNY')
@@ -66,13 +65,14 @@ const ProductController = {
                     message:typeof isCopyLink !== 'undefined' ? dataLocal.uuid : convert.convertPrice(dataLocal, rate)
                 })
             }
-
             if (dataLocal.last_updated === data1688.productInfo.lastUpdateTime) return res.status(200).json({
                 status:true,
                 message:typeof isCopyLink !== 'undefined' ? dataLocal.uuid : convert.convertPrice(dataLocal, rate)
             })
+            const converted2 = await convert.mapping()
+            // console.log(JSON.stringify(converted2), 'slsl');
+            await service.store(converted2)
             const regetProduct = await repo.mysqlByProductId(productId)
-
             return res.status(200).json({
                 status:true,
                 message:typeof isCopyLink !== 'undefined' ? regetProduct.uuid : convert.convertPrice(regetProduct, rate)
@@ -88,13 +88,11 @@ const ProductController = {
 
     async search(req, res){
         try {
-            const keyword = req.body.keyword
+            let keyword = req.body.keyword
+            if(!keyword) return res.status(200).json({status:false,data:[]})
             const service = new Service1688('')
             const search = await service.search(keyword)
-            res.status(200).json({
-                status:false,
-                message:search,
-            })
+            return res.status(200).json(search)
         } catch (error) {
             return res.send(error.message)
         }
