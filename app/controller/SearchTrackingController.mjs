@@ -18,13 +18,17 @@ const SearchTrackingController = {
 
     async store(req, res){
         try {
-            const keyword = req.body.keyword.replace(/ +(?= )/g,'').toLowerCase()
-            const log = new SearchLog({
-                user_id:req.body.user_id,
-                keyword:keyword,
-            })
-            log.save()
-            return res.send({success:true})
+            if(req.body.keyword){
+                const keyword = req.body.keyword.replace(/ +(?= )/g,'').toLowerCase()
+                const log = new SearchLog({
+                    user_id:req.body.user_id,
+                    keyword:keyword,
+                    result:req.body.result ? req.body.result : 0
+                })
+                log.save()
+                return res.send({success:true})
+            }
+            return res.send({success:false})
         } catch (error) {
             return res.send({success:false})
         }
