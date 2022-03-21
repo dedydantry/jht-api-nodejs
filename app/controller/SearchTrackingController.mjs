@@ -37,14 +37,15 @@ const SearchTrackingController = {
             log = await log
             const totalLog = await SearchLog.count()
             let totalPage = totalLog/15
+            const response = report ? log : {
+                total_page:totalPage > parseInt(totalPage) ? parseInt(totalPage) + 1 :  parseInt(totalPage),
+                total:totalLog,
+                last_page:parseInt(page),
+                data:log
+            }
             return res.send({
                 status:true,
-                data:{
-                    total_page:totalPage > parseInt(totalPage) ? parseInt(totalPage) + 1 :  parseInt(totalPage),
-                    total:totalLog,
-                    last_page:parseInt(page),
-                    data:log
-                }
+                data:response
             })
         } catch (error) {
             return res.send({
