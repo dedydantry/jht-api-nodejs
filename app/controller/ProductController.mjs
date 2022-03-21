@@ -15,7 +15,7 @@ const ProductController = {
             const uuid = req.params.id
             const isCopyLink = req.query.copy
             let productId = ''
-
+            let newProduct = true
             const repo = new ProductRepository()
             if (typeof isCopyLink !== 'undefined') {
                 productId = uuid
@@ -26,10 +26,13 @@ const ProductController = {
                     message:findByUuid.data,
                 })
                 productId = findByUuid.data.product_id_1688
+                newProduct = false
             }
 
             const service = new Service1688(productId)
-            const c = await service.buildRelation(productId)
+            if(newProduct){
+                await service.buildRelation(productId)
+            }
             let [data1688, dataLocal] = await Promise.all([
                 service.productDetail(productId),
                 repo.mysqlByProductId(productId)
