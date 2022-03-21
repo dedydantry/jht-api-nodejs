@@ -26,7 +26,9 @@ const ProductController = {
                     message:findByUuid.data,
                 })
                 productId = findByUuid.data.product_id_1688
-                newProduct = false
+                if(findByUuid.data.last_updated != '-'){
+                    newProduct = false
+                }
             }
 
             const service = new Service1688(productId)
