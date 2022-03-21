@@ -3,12 +3,17 @@ export default class ProductRepository {
 
     async mysqlByProductId (productId) {
         try {
-            const product = await Product.with(['category', 'ranges', 'images', 'variants.items', 'attributess', 'note', 'seller', 'keyword'])
+            const product = await Product.with(['category', 'ranges', 'images', 'attributess', 'note', 'seller', 'keyword'])
+                .with('variants', (q) => {
+                    q.whereNull('deleted_at')
+                })
+                .with('variants.items', (q) => {
+                    q.whereNull('deleted_at')
+                })
                 .where('product_id_1688', productId).first()
             if (!product) return  null
             return product.toJSON()
         } catch (error) {
-            throw error
             return null
         }
     }
