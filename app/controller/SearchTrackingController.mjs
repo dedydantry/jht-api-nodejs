@@ -32,7 +32,7 @@ const SearchTrackingController = {
             if(report){
                 log = SearchLog.aggregate(filters)
             }else{
-                log = SearchLog.find({}).sort({created_at:-1}).skip(skip)
+                log = SearchLog.find({}).sort({created_at:-1}).skip(skip).limit(15)
             }
             log = await log
             const totalLog = await SearchLog.count()
