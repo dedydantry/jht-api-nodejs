@@ -34,7 +34,6 @@ const ProductController = {
                 service.productDetail(productId),
                 repo.mysqlByProductId(productId)
             ])
-
             const rateService = new RateService()
             const rateArr = await rateService.run()
             const idrRate =  rateArr.find(x => x.label === 'CNY')
@@ -58,6 +57,10 @@ const ProductController = {
             const convert = new ConvertProduct(data1688)
             if (!dataLocal) {
                 const converted = await convert.mapping()
+                if(converted === false) return res.status(200).json({
+                    status:false,
+                    message:'Product out of stock'
+                })
                 await service.store(converted)
                 dataLocal = await repo.mysqlByProductId(productId)
                 return res.status(200).json({
@@ -70,7 +73,10 @@ const ProductController = {
                 message:typeof isCopyLink !== 'undefined' ? dataLocal.uuid : convert.convertPrice(dataLocal, rate)
             })
             const converted2 = await convert.mapping()
-            // console.log(JSON.stringify(converted2), 'slsl');
+            if(converted2 === false) return res.status(200).json({
+                status:false,
+                message:'Product out of stock'
+            })
             await service.store(converted2)
             const regetProduct = await repo.mysqlByProductId(productId)
             return res.status(200).json({

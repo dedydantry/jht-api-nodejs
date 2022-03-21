@@ -13,6 +13,8 @@ class ConvertProduct extends TranslateService {
         const masterCategory = this.findCategory()
         const firstCategory = masterCategory[masterCategory.length - 1].name
         const parentCategory = masterCategory
+        const moq = this.masterData.saleInfo.minOrderQuantity !== 'undefined' ? this.masterData.saleInfo.minOrderQuantity : 0
+        if(!moq) return false
         const variant = this.findVariant()
         let productResult =  {
             flag:1688,
@@ -24,7 +26,7 @@ class ConvertProduct extends TranslateService {
             },
             prices:this.findPrice(),
             stock:typeof this.masterData.saleInfo.amountOnSale  !== 'undefined' ? this.masterData.saleInfo.amountOnSale : null,
-            moq:this.masterData.saleInfo.minOrderQuantity,
+            moq:moq,
             images:this.masterData.image.images.map(x => `https://cbu01.alicdn.com/${x}`),
             category:{
                 name_cn:firstCategory ,
@@ -187,25 +189,34 @@ class ConvertProduct extends TranslateService {
                 }
             }
         }
-
-        if (this.masterData.saleInfo.priceRanges.length > 1) {
+        
+        if(typeof this.masterData.saleInfo.priceRanges !== 'undefined'){
+            if (this.masterData.saleInfo.priceRanges.length > 1) {
+                return {
+                    fix:this.masterData.saleInfo.priceRanges[0].price,
+                    ranges:this.masterData.saleInfo.priceRanges.map(x => {
+                        return {
+                            start_quantity:x.startQuantity,
+                            price:parseFloat(x.price)
+                        }
+                    }),
+                    price_type:'RANGE'
+                }
+            }
+    
             return {
-                fix:this.masterData.saleInfo.priceRanges[0].price,
-                ranges:this.masterData.saleInfo.priceRanges.map(x => {
-                    return {
-                        start_quantity:x.startQuantity,
-                        price:parseFloat(x.price)
-                    }
-                }),
-                price_type:'RANGE'
+                fix:parseFloat(this.masterData.saleInfo.priceRanges[0].price),
+                ranges:[],
+                price_type:'FIX'
             }
         }
 
         return {
-            fix:parseFloat(this.masterData.saleInfo.priceRanges[0].price),
+            fix:0,
             ranges:[],
             price_type:'FIX'
         }
+
     }
 
     // translate
