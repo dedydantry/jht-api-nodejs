@@ -18,7 +18,7 @@ const SearchTrackingController = {
 
     async store(req, res){
         try {
-            if(req.body.keyword){
+            if(typeof req.body.keyword !== 'undefined'){
                 const keyword = req.body.keyword.replace(/ +(?= )/g,'').toLowerCase()
                 const log = new SearchLog({
                     user_id:req.body.user_id,
