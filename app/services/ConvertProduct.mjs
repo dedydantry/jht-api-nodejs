@@ -291,7 +291,9 @@ class ConvertProduct extends TranslateService {
                     if(itemString.search('>>') >= 0){
                         const arrItemString = itemString.split(' >> ')
                         arrItemString.map((q, i) => {
-                            params.variants[index].items[i].name_en = q
+                            if(typeof  params.variants[index].items[i] !== 'undefined'){
+                                params.variants[index].items[i].name_en = q
+                            }
                         })
                     }else{
                         params.variants[index].items[0].name_en = itemString
