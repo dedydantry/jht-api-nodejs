@@ -20,7 +20,7 @@ export default class ProductRepository {
 
     async findProductByUuid (uuid) {
         try {
-            const product = await Product.select(['id', 'uuid', 'product_id_1688'])
+            const product = await Product.select(['id', 'uuid', 'product_id_1688', 'last_updated'])
             .where('uuid', uuid)
             .first()
             if (!product) return {
