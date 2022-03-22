@@ -9,12 +9,12 @@ const PORT = process.env.APP_PORT
 const HOST = process.env.APP_HOST
 app.use(cors())
 app.use(express.json())
+app.use(express.static('public/images'))
 
 app.use('/api', ApiRouter)
 // app.use('/', (req, res) => {
 //     res.send('hellos')
 // })
-
 
 app.listen(PORT, () => {
   console.log(`App listening at http://${HOST}:${PORT}`)
