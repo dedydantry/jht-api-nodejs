@@ -44,7 +44,7 @@ const ArticleController = {
 
       const articles = await new Article({
         title: req.body.title,
-        cover: cover ? cover.filename : null,
+        cover: req.file ? cover.filename : null,
         content: req.body.content,
         admin: admin,
         published_at: req.body.published_at,
@@ -101,7 +101,7 @@ const ArticleController = {
       const cover = req.file;
       const params = {
         title: req.body.title,
-        cover: cover ? cover.filename : null,
+        cover: req.file ? cover.filename : null,
         content: req.body.content,
         admin: admin,
         published_at: req.body.published_at,
