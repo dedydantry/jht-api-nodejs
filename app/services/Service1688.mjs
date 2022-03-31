@@ -209,6 +209,30 @@ class Service1688 {
         }
        
     }
+
+    async searchByPicture(picUrl = '', page = 1){
+        try {
+            const path = 'param2/1/com.alibaba.linkplus:alibaba.cross.similar.offer.search'
+            const querySignature = {
+                'picUrl': picUrl,
+                'page': page
+            }
+            const signature = await this.getSignature(picUrl, path, 'search_by_picture')
+            querySignature._aop_signature   = signature.signature
+            querySignature.access_token = signature.access_token
+            const params = new URLSearchParams(querySignature)
+            const str = params.toString()
+            const res = await this.fetching(signature.path, str)
+            // handle response 
+            // still got error Unsupported API
+            return res
+        } catch (error) {
+            return{
+                success:false,
+                data:error.message
+            }
+        }
+    }
 }
 
 export default Service1688

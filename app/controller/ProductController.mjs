@@ -107,6 +107,19 @@ const ProductController = {
         } catch (error) {
             return res.send(error.message)
         }
+    },
+
+    async searchByPicture(req, res){
+        try {
+            let picture = req.body.picture
+            let page = req.body.page
+            if(!picture) return res.status(200).json({status:false,data:[]})
+            const service = new Service1688('')
+            const search = await service.searchByPicture(picture, page)
+            return res.status(200).json(search)
+        } catch (error) {
+            return res.send(error.message)
+        }
     }
 
 }
