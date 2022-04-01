@@ -118,13 +118,14 @@ class ConvertProduct extends TranslateService {
                 image:img,
                 sku_id:x.skuId,
                 spec_id:x.specId,
-                keyVariant
+                keyVariant,
+                skuCode:x.skuCode
             }
         })
 
         this.variantType = isMultiple ? 'multiple_item' : 'single_item' 
         const variant = []
-        const imgGroup = _.groupBy(result, 'image')
+        const imgGroup = isMultiple ?  _.groupBy(result, 'image') :  _.groupBy(result, 'skuCode')
         Object.keys(imgGroup).forEach(function (key) {
             if (isMultiple) {
                 variant.push({
