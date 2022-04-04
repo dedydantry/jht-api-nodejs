@@ -89,7 +89,7 @@ const ProductController = {
                 message:typeof isCopyLink !== 'undefined' ? regetProduct.uuid : convert.convertPrice(regetProduct, rate)
             })
         } catch (error) {
-            // ErrorLog('Fetching product detail', `${error.name}: ${error.message}`, req.params.id)
+            // throw error
             res.send({
                 status:false,
                 message:error.message
