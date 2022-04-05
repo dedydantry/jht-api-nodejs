@@ -17,4 +17,12 @@ try {
   console.log(error.message);
 }
 
+export function decimalField () {
+  return{
+    default: 0,
+    required: true,
+    type: mongoose.Schema.Types.Decimal128,
+    get: v => v.toString(),
+  }
+};
 export default mongoose
