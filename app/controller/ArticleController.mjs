@@ -44,8 +44,8 @@ const ArticleController = {
         title: "required|string",
         cover: "required|string",
         content: "required",
-        admin: "required|object",
-        meta: "required|object",
+        admin: "required",
+        meta: "required",
       });
 
       const matched = await validate.check();
@@ -101,8 +101,8 @@ const ArticleController = {
         title: "required|string",
         cover: "required|string",
         content: "required",
-        admin: "required|object",
-        meta: "required|object",
+        admin: "required",
+        meta: "required",
       });
 
       const matched = await validate.check();
@@ -125,13 +125,17 @@ const ArticleController = {
         meta: meta,
       };
 
-      await Article.updateOne({ _id: articleId }, params, { upsert: true });
+      await Article.updateOne(
+        { _id: articleId },
+        { $set: params },
+        { upsert: true }
+      );
       res.send({
         status: true,
         message: params,
       });
     } catch (error) {
-      return res.send({
+      res.send({
         status: false,
         message: error.message,
       });
