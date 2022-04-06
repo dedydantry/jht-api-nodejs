@@ -4,7 +4,6 @@ const api = express()
 import ProductController from '../app/controller/ProductController.mjs'
 import SearchTrackingController from '../app/controller/SearchTrackingController.mjs'
 import ArticleController from '../app/controller/ArticleController.mjs'
-import upload from '../app/middleware/upload.mjs'
 import EventController from '../app/controller/EventController.mjs'
 import ParticipantController from '../app/controller/ParticipantController.mjs'
 
@@ -20,9 +19,9 @@ api.get('/track-search', SearchTrackingController.index)
 api.post('/track-search', SearchTrackingController.store)
 
 api.get('/articles',ArticleController.index)
-api.post('/article', upload.single("cover"), ArticleController.store);
+api.post('/article', ArticleController.store);
 api.get('/article/:id', ArticleController.show)
-api.put('/article/:id', upload.single('cover'), ArticleController.update)
+api.put('/article/:id', ArticleController.update)
 api.delete('/article/:id', ArticleController.destroy)
 
 api.get('/events', EventController.index)

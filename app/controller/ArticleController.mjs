@@ -1,4 +1,6 @@
 import Article from "../models/mongo/Article.mjs";
+import { Validator } from "node-input-validator";
+import { errorValidations } from "../helpers/index.mjs";
 
 const ArticleController = {
   async index(req, res) {
@@ -24,12 +26,12 @@ const ArticleController = {
         data: articles,
       };
 
-      return res.send({
+      res.send({
         status: true,
         data: result,
       });
     } catch (error) {
-      return res.send({
+      res.send({
         status: false,
         message: error.message,
       });
@@ -38,13 +40,27 @@ const ArticleController = {
 
   async store(req, res) {
     try {
+      const validate = new Validator(req.body, {
+        title: "required",
+        cover: "required",
+        content: "required",
+        admin: "required",
+        meta: "required",
+      });
+
+      const matched = await validate.check();
+      if (!matched)
+        return res.send({
+          status: false,
+          message: errorValidations(validate.errors),
+        });
+
       const admin = req.body.admin ? JSON.parse(req.body.admin) : null;
       const meta = req.body.meta ? JSON.parse(req.body.meta) : null;
-      const cover = req.file;
 
       const articles = await new Article({
         title: req.body.title,
-        cover: req.file ? cover.filename : null,
+        cover: req.body.cover,
         content: req.body.content,
         admin: admin,
         published_at: req.body.published_at,
@@ -52,12 +68,12 @@ const ArticleController = {
       });
       articles.save();
 
-      return res.send({
+      res.send({
         status: true,
-        message: "Article has created",
+        message: articles,
       });
     } catch (error) {
-      return res.send({
+      res.send({
         status: false,
         message: error.message,
       });
@@ -66,20 +82,13 @@ const ArticleController = {
 
   async show(req, res) {
     try {
-      const articleId = req.params.id;
-      const result = await Article.findById(articleId);
-      if (!result)
-        return res.status(404).send({
-          status: false,
-          message: "Article not found",
-        });
-
-      return res.send({
+      const article = await Article.findById(req.params.id);
+      res.send({
         status: true,
-        data: result,
+        data: article,
       });
     } catch (error) {
-      return res.send({
+      res.send({
         status: false,
         message: error.message,
       });
@@ -88,36 +97,39 @@ const ArticleController = {
 
   async update(req, res) {
     try {
-      const articleId = req.params.id;
-      const article = await Article.findById(articleId);
-      if (!article)
-        return res.status(404).send({
+      const validate = new Validator(req.body, {
+        title: "required",
+        cover: "required",
+        content: "required",
+        admin: "required",
+        meta: "required",
+      });
+
+      const matched = await validate.check();
+      if (!matched)
+        return res.send({
           status: false,
-          message: "Article not found",
+          message: errorValidations(validate.errors),
         });
 
+      const articleId = req.params.id;
       const admin = req.body.admin ? JSON.parse(req.body.admin) : null;
       const meta = req.body.meta ? JSON.parse(req.body.meta) : null;
-      const cover = req.file;
+
       const params = {
         title: req.body.title,
-        cover: req.file ? cover.filename : null,
+        cover: req.body.cover,
         content: req.body.content,
         admin: admin,
         published_at: req.body.published_at,
         meta: meta,
       };
 
-      const result = await Article.updateOne(
-        { _id: articleId },
-        { $set: params }
-      );
-
-      if (result)
-        return res.send({
-          status: true,
-          message: "Article has updated",
-        });
+      await Article.updateOne({ _id: articleId }, params, { upsert: true });
+      res.send({
+        status: true,
+        message: params,
+      });
     } catch (error) {
       return res.send({
         status: false,
@@ -128,21 +140,13 @@ const ArticleController = {
 
   async destroy(req, res) {
     try {
-      const articleId = req.params.id;
-      const article = await Article.findById(articleId);
-      if (!article)
-        return res.status(404).send({
-          status: false,
-          message: "Article not found",
-        });
-      const result = await Article.deleteOne({ _id: articleId });
-      if (result)
-        return res.send({
-          status: true,
-          message: "Article has deleted",
-        });
+      await Article.deleteOne({ _id: req.params.id });
+      res.send({
+        status: true,
+        message: "Article has deleted",
+      });
     } catch (error) {
-      return res.send({
+      res.send({
         status: false,
         message: error.message,
       });
