@@ -41,11 +41,11 @@ const ArticleController = {
   async store(req, res) {
     try {
       const validate = new Validator(req.body, {
-        title: "required",
-        cover: "required",
+        title: "required|string",
+        cover: "required|string",
         content: "required",
-        admin: "required",
-        meta: "required",
+        admin: "required|object",
+        meta: "required|object",
       });
 
       const matched = await validate.check();
@@ -98,11 +98,11 @@ const ArticleController = {
   async update(req, res) {
     try {
       const validate = new Validator(req.body, {
-        title: "required",
-        cover: "required",
+        title: "required|string",
+        cover: "required|string",
         content: "required",
-        admin: "required",
-        meta: "required",
+        admin: "required|object",
+        meta: "required|object",
       });
 
       const matched = await validate.check();
