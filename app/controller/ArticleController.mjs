@@ -63,7 +63,8 @@ const ArticleController = {
         cover: req.body.cover,
         content: req.body.content,
         admin: admin,
-        published_at: req.body.published_at,
+        published_at: req.body.published_at ? req.body.published_at : null,
+        status: req.body.published_at ? "Publish" : "Draft",
         meta: meta,
       });
       articles.save();
@@ -121,7 +122,8 @@ const ArticleController = {
         cover: req.body.cover,
         content: req.body.content,
         admin: admin,
-        published_at: req.body.published_at,
+        published_at: req.body.published_at ? req.body.published_at : null,
+        status: req.body.published_at ? 'Publish' : 'Draft',
         meta: meta,
       };
 

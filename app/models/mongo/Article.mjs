@@ -10,7 +10,8 @@ const ArticleSchema = new Schema(
       name: String,
       email: String,
     },
-    published_at: { type: Date, default: Date.now() },
+    status: { type: String, required: true},
+    published_at: { type: Date },
     meta: {
       title: String,
       description: String,
