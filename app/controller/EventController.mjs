@@ -5,7 +5,10 @@ const EventController = {
 
     async index(req, res){
         const events = await Event.find({}).sort({created_at:-1})
-        res.send(events)
+        res.send({
+            status: true,
+            data: events
+        })
     },
 
     async store(req, res) {
