@@ -4,6 +4,7 @@ const EventSchema = new Schema({
     name:String,
     slug:String,
     cover:String,
+    status:String,
     participants:{
         type:Array,
         default:[]

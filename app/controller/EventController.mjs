@@ -29,7 +29,8 @@ const EventController = {
                 slug:req.body.name.toLowerCase().replace(/[^\w ]+/g, '').replace(/ +/g, '-'),
                 cover:req.body.cover,
                 expired_at:req.body.expired_at,
-                price:req.body.price
+                price:req.body.price,
+                status:req.body.status
             }
 
             const events = new Event(params)
@@ -65,7 +66,8 @@ const EventController = {
                 slug:req.body.name.toLowerCase().replace(/[^\w ]+/g, '').replace(/ +/g, '-'),
                 cover:req.body.cover,
                 expired_at:req.body.expired_at,
-                price:req.body.price
+                price:req.body.price,
+                status:req.body.status
             }
 
             await Event.updateOne({_id:req.params.id}, params,{ upsert: true })
