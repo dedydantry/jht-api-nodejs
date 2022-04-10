@@ -5,6 +5,7 @@ import ProductController from '../app/controller/ProductController.mjs'
 import SearchTrackingController from '../app/controller/SearchTrackingController.mjs'
 import EventController from '../app/controller/EventController.mjs'
 import ParticipantController from '../app/controller/ParticipantController.mjs'
+import ProductRecommendController from '../app/controller/ProductRecommendController.mjs'
 
 api.get('/', (req, res) => {
     res.send('api')
@@ -24,5 +25,11 @@ api.put('/events/:id', EventController.update)
 api.delete('/events/:id', EventController.destroy)
 
 api.post('/participants', ParticipantController.store)
+
+api.get('/product-recommend', ProductRecommendController.index)
+api.post('/product-recommend', ProductRecommendController.store)
+api.get('/product-recommend/:id', ProductRecommendController.show)
+api.put('/product-recommend/:id', ProductRecommendController.update)
+api.delete('/product-recommend/:id', ProductRecommendController.destroy)
 
 export default api
