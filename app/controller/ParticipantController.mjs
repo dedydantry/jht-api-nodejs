@@ -12,7 +12,8 @@ const ParticipantController = {
                 email:'required',
                 phone:'required',
                 participants:'required',
-                event:'required'
+                event:'required',
+                schedule:'required'
             })
             const matched = await validate.check();
             if(!matched) return res.send({
@@ -29,6 +30,7 @@ const ParticipantController = {
                 name:req.body.name,
                 email:req.body.email,
                 phone:req.body.phone,
+                schedule:req.body.schedule,
                 participants:req.body.participants,
                 created_at:format(new Date(), 'yyyy-mm-dd H:m:s')
             }
