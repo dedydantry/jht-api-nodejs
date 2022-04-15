@@ -114,7 +114,7 @@ const ProductRecommendController = {
             })
         } catch (error) {
             res.send({
-                status:true,
+                status:false,
                 message:error.message
             })
         }
@@ -129,7 +129,7 @@ const ProductRecommendController = {
             })
         } catch (error) {
             res.send({
-                status:true,
+                status:false,
                 message:error.message
             })
         }

@@ -7,6 +7,7 @@ import ArticleController from '../app/controller/ArticleController.mjs'
 import EventController from '../app/controller/EventController.mjs'
 import ParticipantController from '../app/controller/ParticipantController.mjs'
 import ProductRecommendController from '../app/controller/ProductRecommendController.mjs'
+import ProductCatalogController from '../app/controller/ProductCatalogController.mjs'
 
 api.get('/', (req, res) => {
     res.send('api')
@@ -38,5 +39,9 @@ api.post('/product-recommend', ProductRecommendController.store)
 api.get('/product-recommend/:id', ProductRecommendController.show)
 api.put('/product-recommend/:id', ProductRecommendController.update)
 api.delete('/product-recommend/:id', ProductRecommendController.destroy)
+
+api.get('/product-catalog', ProductCatalogController.index)
+api.post('/product-catalog', ProductCatalogController.store)
+api.delete('/product-catalog/:id', ProductCatalogController.destroy)
 
 export default api
