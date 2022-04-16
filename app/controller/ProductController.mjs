@@ -32,9 +32,9 @@ const ProductController = {
             }
 
             const service = new Service1688(productId)
-            if(newProduct){
+            // if(newProduct){
                 await service.buildRelation(productId)
-            }
+            // }
             let [data1688, dataLocal] = await Promise.all([
                 service.productDetail(productId),
                 repo.mysqlByProductId(productId)
