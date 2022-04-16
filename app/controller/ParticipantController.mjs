@@ -47,11 +47,12 @@ const ParticipantController = {
             }
             const order = new EventOrder(paramsOrder)
             order.save()
+            const total = params.participants.length * parseFloat(order.total)
             return res.send({
                 status:true,
                 message:{
                     invoice:order.invoice,
-                    total:parseFloat(order.total),
+                    total:total,
                     email:req.body.email,
                     phone:req.body.phone,
                     description:'Pembayaran: ' + event.name
