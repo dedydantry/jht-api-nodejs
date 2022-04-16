@@ -100,7 +100,26 @@ const EventController = {
 
     async show(req, res) {
         try {
-            const event = await Event.findOne({slug:req.params.slug}, {_id:1, slug:1, price:1})
+            const event = await Event.findById({slug:req.params.slug}, {_id:1, slug:1, price:1})
+            if(!event) return res.send({
+                status:false,
+                message:'Invaid event'
+            })
+            res.send({
+                status:true,
+                message:event
+            })
+        } catch (error) {
+            res.send({
+                status:false,
+                message:error.message
+            })
+        }
+    },
+
+    async detail(req, res) {
+        try {
+            const event = await Event.findById(req.params.id)
             if(!event) return res.send({
                 status:false,
                 message:'Invaid event'
