@@ -75,7 +75,12 @@ const ProductRecommendController = {
                 message:errorValidations(validate.errors)
             })
 
-            const product = await ProductRecommend.find({product_id: req.body.product_id}).exec()
+            const product = await ProductRecommend.find({
+                $and: [
+                    { _id: {$ne: req.params.id} },
+                    { product_id: req.body.product_id},
+                ]
+            }).exec()
             if(product.length > 0 && product[0].product_id == req.body.product_id) return res.send({
                 status:false,
                 message:'ID Produk ' + req.body.product_id + ' telah terdaftar sebelumnya sebagai produk rekomendasi'
