@@ -4,6 +4,7 @@ import { errorValidations } from '../helpers/index.mjs'
 import { v4 as uuidv4 } from 'uuid';
 
 const ProductRecommendController = {
+    
     async index(req, res){
         const productsRecommend = await ProductRecommend.find({}).sort({created_at: -1})
         return res.send(productsRecommend)
@@ -46,12 +47,12 @@ const ProductRecommendController = {
             
             const productsRecommend = new ProductRecommend(params)
             productsRecommend.save()
-            res.send({
+            return res.send({
                 status:true,
                 message: productsRecommend
             })
         } catch (error) {
-            res.send({
+            return res.send({
                 status:false,
                 message:error.message,
             })
@@ -98,12 +99,12 @@ const ProductRecommendController = {
             }
 
             await ProductRecommend.updateOne({_id:req.params.id}, params,{ upsert: true })
-            res.send({
+            return res.send({
                 status:true,
                 message:params
             })
         } catch (error) {
-            res.send({
+            return res.send({
                 status:false,
                 message:error.message,
             })
@@ -113,12 +114,12 @@ const ProductRecommendController = {
     async destroy(req, res){
         try {
             await ProductRecommend.deleteOne({_id:req.params.id})
-            res.send({
+            return res.send({
                 status:true,
                 message:'Product has been deleted'
             })
         } catch (error) {
-            res.send({
+            return res.send({
                 status:true,
                 message:error.message
             })
@@ -128,12 +129,12 @@ const ProductRecommendController = {
     async show(req, res){
         try {
             const product = await ProductRecommend.findById(req.params.id)
-            res.send({
+            return res.send({
                 status:true,
                 message:product
             })
         } catch (error) {
-            res.send({
+            return res.send({
                 status:true,
                 message:error.message
             })
