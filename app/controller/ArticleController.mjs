@@ -69,6 +69,7 @@ const ArticleController = {
 
       const articles = await new Article({
         title: req.body.title,
+        slug: req.body.title.toLowerCase().replace(/[^\w ]+/g, "").replace(/ +/g, "-"),
         cover: req.body.cover,
         content: req.body.content,
         admin: admin,
@@ -105,6 +106,27 @@ const ArticleController = {
     }
   },
 
+  async detail(req, res) {
+    try {
+      const article = await Article.findOne({ slug: req.params.slug });
+      if (!article)
+        return res.send({
+          status: false,
+          message: "Invalid article",
+        });
+
+      return res.send({
+        status: true,
+        data: article,
+      });
+    } catch (error) {
+      return res.send({
+        status: false,
+        message: error.message,
+      });
+    }
+  },
+
   async update(req, res) {
     try {
       const validate = new Validator(req.body, {
@@ -128,6 +150,7 @@ const ArticleController = {
 
       const params = {
         title: req.body.title,
+        slug: req.body.title.toLowerCase().replace(/[^\w ]+/g, "").replace(/ +/g, "-"),
         cover: req.body.cover,
         content: req.body.content,
         admin: admin,

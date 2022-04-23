@@ -22,6 +22,7 @@ api.post('/track-search', SearchTrackingController.store)
 api.get('/articles',ArticleController.index)
 api.post('/article', ArticleController.store);
 api.get('/article/:id', ArticleController.show)
+api.get('/article/detail/:slug', ArticleController.detail)
 api.put('/article/:id', ArticleController.update)
 api.delete('/article/:id', ArticleController.destroy)
 

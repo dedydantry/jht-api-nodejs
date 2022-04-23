@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 const ArticleSchema = new Schema(
   {
     title: { type: String, required: true },
+    slug: { type: String, required: true },
     cover: String,
     content: { type: String, required: true },
     admin: {
