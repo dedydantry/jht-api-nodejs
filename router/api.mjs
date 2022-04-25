@@ -5,6 +5,7 @@ import ProductController from '../app/controller/ProductController.mjs'
 import SearchTrackingController from '../app/controller/SearchTrackingController.mjs'
 import ArticleController from '../app/controller/ArticleController.mjs'
 import EventController from '../app/controller/EventController.mjs'
+import EventOrderController from '../app/controller/EventOrderController.mjs'
 import ParticipantController from '../app/controller/ParticipantController.mjs'
 import ProductRecommendController from '../app/controller/ProductRecommendController.mjs'
 
@@ -32,6 +33,8 @@ api.get('/events/:slug', EventController.show)
 api.get('/events/detail/:id', EventController.detail)
 api.put('/events/:id', EventController.update)
 api.delete('/events/:id', EventController.destroy)
+
+api.get('/events/orders/:id', EventOrderController.index)
 
 api.post('/participants', ParticipantController.store)
 
