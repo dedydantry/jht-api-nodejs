@@ -7,21 +7,19 @@ const ArticleController = {
     try {
       let skip = 0;
       let limit = 15;
-      let status = req.query.status ? req.query.status : "";
+      const status = req.query.status
+        ? {
+            status: req.query.status,
+          }
+        : {};
+
       let page = req.query.page ? req.query.page : 1;
       skip = page === 1 ? 0 : (page - 1) * 15;
-      if (status) {
-        var articles = Article.find({ status: status })
-          .sort({ created_at: -1 })
-          .skip(skip)
-          .limit(limit);
-      } else {
-        var articles = Article.find({})
-          .sort({ created_at: -1 })
-          .skip(skip)
-          .limit(limit);
-      }
 
+      var articles = Article.find({ ...status })
+        .sort({ created_at: -1 })
+        .skip(skip)
+        .limit(limit);
       articles = await articles;
       const totalArticle = await Article.count();
       let totalPage = totalArticle / 15;
@@ -69,7 +67,10 @@ const ArticleController = {
 
       const articles = await new Article({
         title: req.body.title,
-        slug: req.body.title.toLowerCase().replace(/[^\w ]+/g, "").replace(/ +/g, "-"),
+        slug: req.body.title
+          .toLowerCase()
+          .replace(/[^\w ]+/g, "")
+          .replace(/ +/g, "-"),
         cover: req.body.cover,
         content: req.body.content,
         admin: admin,
@@ -150,7 +151,10 @@ const ArticleController = {
 
       const params = {
         title: req.body.title,
-        slug: req.body.title.toLowerCase().replace(/[^\w ]+/g, "").replace(/ +/g, "-"),
+        slug: req.body.title
+          .toLowerCase()
+          .replace(/[^\w ]+/g, "")
+          .replace(/ +/g, "-"),
         cover: req.body.cover,
         content: req.body.content,
         admin: admin,
