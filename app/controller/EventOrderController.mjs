@@ -39,10 +39,11 @@ const EventOrderController = {
         payment_payload: req.body.payment_payload,
       };
 
-      await EventOrders.updateOne({
-        invoice: invoice,
-        $set: params,
-      });
+      await EventOrders.updateOne(
+        { invoice: invoice },
+        { $set: params },
+        { upsert: true }
+      );
 
       return res.send({
         status: true,
