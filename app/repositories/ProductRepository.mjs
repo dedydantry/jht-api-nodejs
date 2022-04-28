@@ -18,9 +18,26 @@ export default class ProductRepository {
         }
     }
 
+    async findProductLocalById (productIdLocal) {
+        try {
+            const product = await Product.with(['category', 'ranges', 'images', 'attributess', 'note', 'seller', 'keyword'])
+                .with('variants', (q) => {
+                    q.whereNull('deleted_at')
+                })
+                .with('variants.items', (q) => {
+                    q.whereNull('deleted_at')
+                })
+                .where('id', productIdLocal).first()
+            if (!product) return  null
+            return product.toJSON()
+        } catch (error) {
+            return null
+        }
+    }
+
     async findProductByUuid (uuid) {
         try {
-            const product = await Product.select(['id', 'uuid', 'product_id_1688', 'last_updated'])
+            const product = await Product.select(['id', 'uuid', 'product_id_1688', 'last_updated', 'flag'])
             .where('uuid', uuid)
             .first()
             if (!product) return {

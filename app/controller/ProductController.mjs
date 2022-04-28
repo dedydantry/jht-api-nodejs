@@ -15,6 +15,8 @@ const ProductController = {
             const uuid = req.params.id
             const isCopyLink = req.query.copy
             let productId = ''
+            let productIdLocal = ''
+            let productFlag = ''
             let newProduct = true
             const repo = new ProductRepository()
             if (typeof isCopyLink !== 'undefined') {
@@ -26,9 +28,20 @@ const ProductController = {
                     message:findByUuid.data,
                 })
                 productId = findByUuid.data.product_id_1688
+                productIdLocal = findByUuid.data.id;
+                productFlag = findByUuid.data.flag
                 if(findByUuid.data.last_updated != '-'){
                     newProduct = false
                 }
+            }
+
+            // if product local
+            if(productFlag === 'local'){
+                const product = await repo.findProductLocalById(productIdLocal);
+                return res.status(200).json({
+                  status: true,
+                  message: product
+                })
             }
 
             const service = new Service1688(productId)
