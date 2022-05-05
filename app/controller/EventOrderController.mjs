@@ -4,7 +4,7 @@ import { errorValidations } from "../helpers/index.mjs";
 const EventOrderController = {
   async index(req, res) {
     try {
-      const orders = await EventOrders.find({ event_id: req.params.id });
+      const orders = await EventOrders.find({ event_id: req.params.id }).sort({created_at: -1});
       return res.send({
         status: true,
         data: orders,
