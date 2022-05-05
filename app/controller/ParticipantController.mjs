@@ -32,7 +32,7 @@ const ParticipantController = {
                 phone:req.body.phone,
                 schedule:req.body.schedule,
                 participants:req.body.participants,
-                created_at:format(new Date(), 'yyyy-mm-dd H:m:s')
+                created_at:format(new Date(), 'yyyy-MM-dd H:m:s', { timeZone: 'Asia/Jakarta' })
             }
             await Event.findByIdAndUpdate(event._id, 
                 { "$push": { "participants": params}},
