@@ -43,6 +43,7 @@ const ParticipantController = {
                 invoice:Date.now(),
                 name:req.body.name,
                 email:req.body.email,
+                phone:req.body.phone,
                 total:event.price,
                 event_id:event._id
             }
