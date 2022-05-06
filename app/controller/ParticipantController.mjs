@@ -40,17 +40,17 @@ const ParticipantController = {
             )
                 
             const paramsOrder = {
-                invoice:Date.now(),
-                name:req.body.name,
-                email:req.body.email,
-                phone:req.body.phone,
-                schedule:req.body.schedule,
-                total:event.price,
-                event_id:event._id
-            }
+              invoice: Date.now(),
+              name: req.body.name,
+              email: req.body.email,
+              phone: req.body.phone,
+              schedule: req.body.schedule,
+              total: params.participants.length * parseFloat(event.price),
+              event_id: event._id,
+            };
             const order = new EventOrder(paramsOrder)
             order.save()
-            const total = params.participants.length * parseFloat(order.total)
+            const total = params.participants.length * parseFloat(event.price)
             return res.send({
                 status:true,
                 message:{
