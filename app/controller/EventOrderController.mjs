@@ -21,7 +21,7 @@ const EventOrderController = {
 
   async show(req, res) {
     try {
-      const order = await Eventorders.findOne({ invoice: req.params.invoice });
+      const order = await EventOrders.findOne({ invoice: req.params.invoice });
       if (!order)
         return res.send({
           status: false,
