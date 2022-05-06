@@ -7,6 +7,7 @@ const orders = new Schema({
     email:String,
     name:String,
     phone:String,
+    schedule:String,
     total:decimalField(),
     paid_at:{
         type:Date,

@@ -44,6 +44,7 @@ const ParticipantController = {
                 name:req.body.name,
                 email:req.body.email,
                 phone:req.body.phone,
+                schedule:req.body.schedule,
                 total:event.price,
                 event_id:event._id
             }
