@@ -4,10 +4,32 @@ import { errorValidations } from "../helpers/index.mjs";
 const EventOrderController = {
   async index(req, res) {
     try {
-      const orders = await EventOrders.find({ event_id: req.params.id }).sort({created_at: -1});
+      const orders = await EventOrders.find({ event_id: req.params.id }).sort({
+        created_at: -1,
+      });
       return res.send({
         status: true,
         data: orders,
+      });
+    } catch (error) {
+      return res.send({
+        status: false,
+        message: error.message,
+      });
+    }
+  },
+
+  async show(req, res) {
+    try {
+      const order = await Eventorders.findOne({ invoice: req.params.invoice });
+      if (!order)
+        return res.send({
+          status: false,
+          message: "Invaid order",
+        });
+      res.send({
+        status: true,
+        message: order,
       });
     } catch (error) {
       return res.send({
