@@ -5,6 +5,7 @@ const orders = new Schema({
     event_id:String,
     invoice:String,
     email:String,
+    name:String,
     total:decimalField(),
     paid_at:{
         type:Date,

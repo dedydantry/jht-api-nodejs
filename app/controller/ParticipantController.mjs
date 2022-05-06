@@ -41,6 +41,7 @@ const ParticipantController = {
                 
             const paramsOrder = {
                 invoice:Date.now(),
+                name:req.body.name,
                 email:req.body.email,
                 total:event.price,
                 event_id:event._id
