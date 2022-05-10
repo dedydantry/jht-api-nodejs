@@ -36,6 +36,8 @@ const ParticipantController = {
                 payment_payload:null,
                 invoice:Date.now().toString(),
                 total:req.body.participants.length * parseFloat(event.price),
+                utm_source:req.body.utm_source,
+                utm_campaign:req.body.utm_campaign,
                 created_at:format(new Date(), 'yyyy-MM-dd H:m:s', { timeZone: 'Asia/Jakarta' })
             }
             await Event.findByIdAndUpdate(event._id, 
