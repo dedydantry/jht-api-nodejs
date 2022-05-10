@@ -1,5 +1,4 @@
 import Event from '../models/mongo/Events.mjs'
-import EventOrder from "../models/mongo/EventOrder.mjs"
 import {errorValidations} from '../helpers/index.mjs'
 import {Validator} from 'node-input-validator'
 import {format} from 'date-fns'
@@ -25,36 +24,30 @@ const ParticipantController = {
                 status:false,
                 message:'Invalid event'
             })
-
+            
             const params = {
                 name:req.body.name,
                 email:req.body.email,
                 phone:req.body.phone,
                 schedule:req.body.schedule,
                 participants:req.body.participants,
+                paid_at:null,
+                paid_by:null,
+                payment_payload:null,
+                invoice:Date.now(),
+                total:req.body.participants.length * parseFloat(event.price),
                 created_at:format(new Date(), 'yyyy-MM-dd H:m:s', { timeZone: 'Asia/Jakarta' })
             }
             await Event.findByIdAndUpdate(event._id, 
                 { "$push": { "participants": params}},
                 { "new": true, "upsert": true }
             )
-                
-            const paramsOrder = {
-              invoice: Date.now(),
-              name: req.body.name,
-              email: req.body.email,
-              phone: req.body.phone,
-              schedule: req.body.schedule,
-              total: params.participants.length * parseFloat(event.price),
-              event_id: event._id,
-            };
-            const order = new EventOrder(paramsOrder)
-            order.save()
+
             const total = params.participants.length * parseFloat(event.price)
             return res.send({
                 status:true,
                 message:{
-                    invoice:order.invoice,
+                    invoice:params.invoice,
                     total:total,
                     email:req.body.email,
                     phone:req.body.phone,
