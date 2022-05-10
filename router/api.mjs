@@ -34,9 +34,7 @@ api.get('/events/detail/:id', EventController.detail)
 api.put('/events/:id', EventController.update)
 api.delete('/events/:id', EventController.destroy)
 
-api.get('/events/orders/:id', EventOrderController.index)
 api.post('/events/orders/pay/:invoice', EventOrderController.update)
-api.get('/events/orders/detail/:invoice', EventOrderController.show)
 
 api.post('/participants', ParticipantController.store)
 

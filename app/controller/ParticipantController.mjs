@@ -24,7 +24,7 @@ const ParticipantController = {
                 status:false,
                 message:'Invalid event'
             })
-            
+
             const params = {
                 name:req.body.name,
                 email:req.body.email,
@@ -34,7 +34,7 @@ const ParticipantController = {
                 paid_at:null,
                 paid_by:null,
                 payment_payload:null,
-                invoice:Date.now(),
+                invoice:Date.now().toString(),
                 total:req.body.participants.length * parseFloat(event.price),
                 created_at:format(new Date(), 'yyyy-MM-dd H:m:s', { timeZone: 'Asia/Jakarta' })
             }
@@ -47,7 +47,7 @@ const ParticipantController = {
             return res.send({
                 status:true,
                 message:{
-                    invoice:params.invoice,
+                    invoice:params.invoice.toString(),
                     total:total,
                     email:req.body.email,
                     phone:req.body.phone,

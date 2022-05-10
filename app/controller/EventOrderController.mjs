@@ -1,50 +1,13 @@
-import EventOrders from "../models/mongo/EventOrder.mjs";
-import { Validator } from "node-input-validator";
-import { errorValidations } from "../helpers/index.mjs";
+import Event from '../models/mongo/Events.mjs'
+import { Validator } from 'node-input-validator';
+import { errorValidations } from '../helpers/index.mjs';
 const EventOrderController = {
-  async index(req, res) {
-    try {
-      const orders = await EventOrders.find({ event_id: req.params.id }).sort({
-        created_at: -1,
-      });
-      return res.send({
-        status: true,
-        data: orders,
-      });
-    } catch (error) {
-      return res.send({
-        status: false,
-        message: error.message,
-      });
-    }
-  },
-
-  async show(req, res) {
-    try {
-      const order = await EventOrders.findOne({ invoice: req.params.invoice });
-      if (!order)
-        return res.send({
-          status: false,
-          message: "Invaid order",
-        });
-      res.send({
-        status: true,
-        message: order,
-      });
-    } catch (error) {
-      return res.send({
-        status: false,
-        message: error.message,
-      });
-    }
-  },
-
   async update(req, res) {
     try {
       const validate = new Validator(req.body, {
-        paid_at: "required",
-        paid_by: "required",
-        payment_payload: "required",
+        paid_at: 'required',
+        paid_by: 'required',
+        payment_payload: 'required',
       });
       const matched = await validate.check();
       if (!matched) {
@@ -55,21 +18,16 @@ const EventOrderController = {
       }
 
       const invoice = req.params.invoice;
-      const params = {
-        paid_at: req.body.paid_at,
-        paid_by: req.body.paid_by,
-        payment_payload: req.body.payment_payload,
-      };
 
-      await EventOrders.updateOne(
-        { invoice: invoice },
-        { $set: params },
-        { upsert: true }
-      );
+      await Event.updateOne({'participants.invoice': invoice}, {'$set':{
+        'participants.$.paid_at' : req.body.paid_at,
+        'participants.$.paid_by' : req.body.paid_by,
+        'participants.$.payment_payload' : req.body.payment_payload,
+      }})
 
       return res.send({
         status: true,
-        message: params,
+        message: req.body,
       });
     } catch (error) {
       return res.send({
