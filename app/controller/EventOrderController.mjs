@@ -5,7 +5,6 @@ const EventOrderController = {
   async show(req, res) {
     try {
       const invoice = req.params.invoice;
-      console.log('invoice', invoice);
       const event = await Event.findOne({ "participants.invoice":invoice },{'participants.$':1});
       return res.send({
         status: true,
