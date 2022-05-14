@@ -21,6 +21,7 @@
     "express": "^4.17.1",
     "knex": "^0.21.6",
     "lodash": "^4.17.21",
+    "messagebird": "^3.8.0",
     "mongoose": "^6.2.7",
     "mysql": "^2.18.1",
     "node-cache": "^5.1.2",

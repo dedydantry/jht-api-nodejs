@@ -8,6 +8,7 @@ import EventController from '../app/controller/EventController.mjs'
 import EventOrderController from '../app/controller/EventOrderController.mjs'
 import ParticipantController from '../app/controller/ParticipantController.mjs'
 import ProductRecommendController from '../app/controller/ProductRecommendController.mjs'
+import SendOtpController from '../app/controller/SendOtpController.mjs'
 
 api.get('/', (req, res) => {
     res.send('api')
@@ -38,6 +39,8 @@ api.post('/events/orders/pay/:invoice', EventOrderController.update)
 api.get("/events/orders/detail/:invoice", EventOrderController.show);
 
 api.post('/participants', ParticipantController.store)
+
+api.get('/send-otp', SendOtpController.index)
 
 api.get('/product-recommend', ProductRecommendController.index)
 api.post('/product-recommend', ProductRecommendController.store)
