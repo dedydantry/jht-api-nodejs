@@ -15,7 +15,6 @@ const ProductController = {
             const uuid = req.params.id
             const isCopyLink = req.query.copy
             let productId = ''
-            let newProduct = true
             const repo = new ProductRepository()
             if (typeof isCopyLink !== 'undefined') {
                 productId = uuid
@@ -32,9 +31,7 @@ const ProductController = {
             }
 
             const service = new Service1688(productId)
-            // if(newProduct){
-                await service.buildRelation(productId)
-            // }
+            await service.buildRelation(productId)
             let [data1688, dataLocal] = await Promise.all([
                 service.productDetail(productId),
                 repo.mysqlByProductId(productId)
@@ -89,7 +86,7 @@ const ProductController = {
                 message:typeof isCopyLink !== 'undefined' ? regetProduct.uuid : convert.convertPrice(regetProduct, rate)
             })
         } catch (error) {
-            // throw error
+            throw error
             res.send({
                 status:false,
                 message:error.message
