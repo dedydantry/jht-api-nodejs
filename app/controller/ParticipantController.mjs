@@ -38,7 +38,7 @@ const ParticipantController = {
                 invoice_url:null,
                 total:req.body.participants.length * parseFloat(event.price),
                 utm:req.body.utm,
-                created_at:format(new Date(), 'yyyy-MM-dd H:mm:s', { timeZone: 'Asia/Jakarta' })
+                created_at:format(new Date(), 'yyyy-MM-dd HH:mm:ss', { timeZone: 'Asia/Jakarta' })
             }
             await Event.findByIdAndUpdate(event._id, 
                 { "$push": { "participants": params}},
