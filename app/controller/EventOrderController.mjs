@@ -100,24 +100,13 @@ const EventOrderController = {
 
   async refund(req, res){
     try {
-      const validate = new Validator(req.body, {
-        status: 'required'
-      })
-      const matched = await validate.check()
-      if (!matched) {
-        return res.send({
-          status: false,
-          message: errorValidations(validate.errors)
-        })
-      }
-
       const invoice = req.params.invoice
       await Event.updateOne(
         { "participants.invoice": invoice },
         {
           $set: {
-            "participants.$.status": req.body.status,
-          },
+            "participants.$.status": 'refund',
+          }
         }
       )
 

@@ -37,7 +37,7 @@ api.delete('/events/:id', EventController.destroy)
 api.post('/events/orders/pay/:invoice', EventOrderController.update)
 api.post('/events/orders/invoice/:invoice', EventOrderController.invoice)
 api.get('/events/orders/detail/:invoice', EventOrderController.show)
-api.get('/events/orders/refund/:invoice', EventOrderController.refund)
+api.post('/events/orders/refund/:invoice', EventOrderController.refund)
 
 api.post('/participants', ParticipantController.store)
 
