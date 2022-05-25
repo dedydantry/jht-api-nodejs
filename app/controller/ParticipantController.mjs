@@ -36,6 +36,7 @@ const ParticipantController = {
                 payment_payload:null,
                 invoice:Date.now().toString(),
                 invoice_url:null,
+                status:'unpaid',
                 total:req.body.participants.length * parseFloat(event.price),
                 utm:req.body.utm,
                 created_at:format(new Date(), 'yyyy-MM-dd HH:mm:ss', { timeZone: 'Asia/Jakarta' })
