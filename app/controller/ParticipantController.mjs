@@ -37,7 +37,7 @@ const ParticipantController = {
                 invoice:Date.now().toString(),
                 invoice_url:null,
                 status:'unpaid',
-                total:req.body.participants.length * parseFloat(event.price),
+                total:req.body.participants.length * parseFloat(req.body.price),
                 utm:req.body.utm,
                 created_at:format(new Date(), 'yyyy-MM-dd HH:mm:ss', { timeZone: 'Asia/Jakarta' })
             }
@@ -46,7 +46,7 @@ const ParticipantController = {
                 { "new": true, "upsert": true }
             )
 
-            const total = params.participants.length * parseFloat(event.price)
+            const total = params.participants.length * parseFloat(req.body.price)
             return res.send({
                 status:true,
                 message:{

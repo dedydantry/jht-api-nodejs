@@ -17,7 +17,8 @@ const EventController = {
                 name:'required',
                 cover:'required',
                 expired_at:'required',
-                price:'required'
+                price:'required',
+                schedules:'required'
             })
             const matched = await validate.check();
             if(!matched) return res.send({
@@ -30,11 +31,13 @@ const EventController = {
                 cover:req.body.cover,
                 expired_at:req.body.expired_at,
                 price:req.body.price,
-                status:req.body.status
+                status:req.body.status,
+                schedules:req.body.schedules
             }
 
             const events = new Event(params)
             events.save()
+            
             res.send({
                 status:true,
                 message:events
@@ -53,7 +56,8 @@ const EventController = {
                 name:'required',
                 cover:'required',
                 expired_at:'required',
-                price:'required'
+                price:'required',
+                schedules:'required'
             })
             const matched = await validate.check();
             if(!matched) return res.send({
@@ -67,7 +71,8 @@ const EventController = {
                 cover:req.body.cover,
                 expired_at:req.body.expired_at,
                 price:req.body.price,
-                status:req.body.status
+                status:req.body.status,
+                schedules:req.body.schedules
             }
 
             await Event.updateOne({_id:req.params.id}, params,{ upsert: true })
@@ -100,7 +105,7 @@ const EventController = {
 
     async show(req, res) {
         try {
-            const event = await Event.findOne({slug:req.params.slug}, {_id:1, slug:1, price:1})
+            const event = await Event.findOne({slug:req.params.slug}, {_id:1, name:1, slug:1, price:1, schedules: 1})
             if(!event) return res.send({
                 status:false,
                 message:'Invaid event'

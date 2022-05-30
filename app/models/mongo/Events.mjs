@@ -9,6 +9,10 @@ const EventSchema = new Schema({
         type:Array,
         default:[]
     },
+    schedules:{
+        type:Array,
+        default:[]
+    },
     expired_at:Date,
     price:decimalField()
 }, { timestamps: { createdAt: 'created_at', updatedAt:'updated_at' }})
