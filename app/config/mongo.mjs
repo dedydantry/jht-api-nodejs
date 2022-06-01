@@ -4,8 +4,8 @@ dotenv.config()
 
 try {
    mongoose
-    .connect(`mongodb://${process.env.MONGO_NAME}:${encodeURIComponent(process.env.MONGO_PASSWORD)}@8.215.28.69:27017/${process.env.MONGO_DB}`, {
-      // .connect(`mongodb://localhost:27017/caribarang_mongodb`, {
+    // .connect(`mongodb://${process.env.MONGO_NAME}:${encodeURIComponent(process.env.MONGO_PASSWORD)}@8.215.28.69:27017/${process.env.MONGO_DB}`, {
+      .connect(`mongodb://localhost:27017/caribarang_mg`, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useNewUrlParser:true

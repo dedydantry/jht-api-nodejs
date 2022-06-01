@@ -25,18 +25,23 @@ const ParticipantController = {
                 message:'Invalid event'
             })
 
+            let manualRegist = false; // this scenario for manual registration that created by admin
+            if(req.body.utm == 'manual' && req.body.payment_payload){
+                manualRegist = true;
+            }
+
             const params = {
                 name:req.body.name,
                 email:req.body.email,
                 phone:req.body.phone,
                 schedule:req.body.schedule,
                 participants:req.body.participants,
-                paid_at:null,
-                paid_by:null,
-                payment_payload:null,
+                paid_at:(manualRegist) ? format(new Date(), 'yyyy-MM-dd HH:mm:ss', { timeZone: 'Asia/Jakarta' }) : null,
+                paid_by:(manualRegist) ? 'admin' : null,
+                payment_payload: (manualRegist) ? req.body.payment_payload : null,
                 invoice:Date.now().toString(),
                 invoice_url:null,
-                status:'unpaid',
+                status: (manualRegist) ? 'paid' : 'unpaid',
                 total:req.body.participants.length * parseFloat(req.body.price),
                 utm:req.body.utm,
                 created_at:format(new Date(), 'yyyy-MM-dd HH:mm:ss', { timeZone: 'Asia/Jakarta' })
