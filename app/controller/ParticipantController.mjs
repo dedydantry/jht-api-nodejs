@@ -26,7 +26,7 @@ const ParticipantController = {
             })
 
             let manualRegist = false; // this scenario for manual registration that created by admin
-            if(req.body.utm == 'manual' && req.body.payment_payload){
+            if(req.body.file_transfer){
                 manualRegist = true;
             }
 
@@ -38,20 +38,25 @@ const ParticipantController = {
                 participants:req.body.participants,
                 paid_at:(manualRegist) ? format(new Date(), 'yyyy-MM-dd HH:mm:ss', { timeZone: 'Asia/Jakarta' }) : null,
                 paid_by:(manualRegist) ? 'admin' : null,
-                payment_payload: (manualRegist) ? req.body.payment_payload : null,
+                payment_payload: null,
                 invoice:Date.now().toString(),
                 invoice_url:null,
                 status: (manualRegist) ? 'paid' : 'unpaid',
-                total:req.body.participants.length * parseFloat(req.body.price),
+                total: req.body.total ? parseFloat(req.body.total) : req.body.participants.length * parseFloat(req.body.price),
                 utm:req.body.utm,
                 created_at:format(new Date(), 'yyyy-MM-dd HH:mm:ss', { timeZone: 'Asia/Jakarta' })
             }
+
+            if(req.body.file_transfer){
+                params.file_transfer = req.body.file_transfer
+            }
+
             await Event.findByIdAndUpdate(event._id, 
                 { "$push": { "participants": params}},
                 { "new": true, "upsert": true }
             )
 
-            const total = params.participants.length * parseFloat(req.body.price)
+            const total = req.body.total ? parseFloat(req.body.total) : params.participants.length * parseFloat(req.body.price)
             return res.send({
                 status:true,
                 message:{
