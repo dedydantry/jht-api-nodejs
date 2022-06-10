@@ -11,7 +11,7 @@ const ProductRecommendController = {
             let limit = req.query.limit ? req.query.limit : 15;
 
             let page = req.query.page ? req.query.page : 1;
-            skip = page === 1 ? 0 : (page - 1) * 15;
+            skip = page === 1 ? 0 : (page - 1) * limit;
       
             const productsRecommend = await ProductRecommend.find({})
               .sort({ created_at: -1 })
@@ -19,7 +19,7 @@ const ProductRecommendController = {
               .limit(limit);
 
             const totalProduct = await ProductRecommend.count();
-            let totalPage = totalProduct / 15;
+            let totalPage = totalProduct / limit;
             const result = {
               total_page:
                 totalPage > parseInt(totalPage)
