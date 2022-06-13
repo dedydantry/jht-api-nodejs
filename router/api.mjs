@@ -29,6 +29,7 @@ api.delete('/article/:id', ArticleController.destroy)
 
 api.get('/events', EventController.index)
 api.post('/events', EventController.store)
+api.post('/events/invoice', EventController.invoice)
 api.get('/events/:slug', EventController.show)
 api.get('/events/detail/:id', EventController.detail)
 api.put('/events/:id', EventController.update)
