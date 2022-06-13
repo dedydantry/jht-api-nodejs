@@ -1,3 +1,4 @@
+import {format} from 'date-fns'
 import Product from '../models/Product.mjs'
 export default class ProductRepository {
 
@@ -36,6 +37,21 @@ export default class ProductRepository {
                 status:false,
                 data:error.message
             }
+        }
+    }
+
+    async removed(productId){
+        try {
+            console.log(productId, 'mantaf');
+            const removed = await Product
+            .where({product_id_1688:productId})
+            .save(
+                {removed_at:format(new Date(), 'yyyy-MM-dd HH:mm:ss', { timeZone: 'Asia/Jakarta' })},
+                {patch:true}
+            )
+            return true
+        } catch (error) {
+            return false
         }
     }
 }
