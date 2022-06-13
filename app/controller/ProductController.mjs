@@ -25,9 +25,6 @@ const ProductController = {
                     message:findByUuid.data,
                 })
                 productId = findByUuid.data.product_id_1688
-                // if(findByUuid.data.last_updated != '-'){
-                //     newProduct = false
-                // }
             }
 
             const service = new Service1688(productId)
@@ -50,9 +47,17 @@ const ProductController = {
                         message: cvrt.convertPrice(dataLocal, rate)
                     })
                 }
+                
+            }
+
+            // check if product has removed
+            if(typeof data1688.message != 'undefined'){
+                if(data1688.message.includes('已下架')){
+                    repo.removed(productId)
+                }
                 return res.status(200).json({
                     status:false,
-                    message: data1688//typeof data1688.message != 'undefined' ? data1688.message : 'Invalid product from 1688 or Product has removed'
+                    message: data1688
                 })
             }
 
