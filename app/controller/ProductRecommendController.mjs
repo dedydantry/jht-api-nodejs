@@ -20,19 +20,16 @@ const ProductRecommendController = {
 
             const totalProduct = await ProductRecommend.count();
             let totalPage = totalProduct / limit;
-            const result = {
-              total_page:
-                totalPage > parseInt(totalPage)
-                  ? parseInt(totalPage) + 1
-                  : parseInt(totalPage),
-              total: totalProduct,
-              last_page: parseInt(page),
-              data: productsRecommend,
-            };
       
             res.send({
-              status: true,
-              data: result,
+                status: true,
+                total_page:
+                    totalPage > parseInt(totalPage)
+                    ? parseInt(totalPage) + 1
+                    : parseInt(totalPage),
+                total: totalProduct,
+                last_page: parseInt(page),
+                data: productsRecommend,
             });
           } catch (error) {
             res.send({
