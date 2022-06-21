@@ -6,8 +6,37 @@ import { v4 as uuidv4 } from 'uuid';
 const ProductRecommendController = {
     
     async index(req, res){
-        const productsRecommend = await ProductRecommend.find({}).sort({created_at: -1})
-        return res.send(productsRecommend)
+        try {
+            let skip = 0;
+            let limit = req.query.limit ? req.query.limit : 15;
+
+            let page = req.query.page ? req.query.page : 1;
+            skip = page === 1 ? 0 : (page - 1) * limit;
+      
+            const productsRecommend = await ProductRecommend.find({})
+              .sort({ created_at: -1 })
+              .skip(skip)
+              .limit(limit);
+
+            const totalProduct = await ProductRecommend.count();
+            let totalPage = totalProduct / limit;
+      
+            res.send({
+                status: true,
+                total_page:
+                    totalPage > parseInt(totalPage)
+                    ? parseInt(totalPage) + 1
+                    : parseInt(totalPage),
+                total: totalProduct,
+                last_page: parseInt(page),
+                data: productsRecommend,
+            });
+          } catch (error) {
+            res.send({
+              status: false,
+              message: error.message,
+            });
+          }
     },
 
     async store(req, res) {
