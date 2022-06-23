@@ -8,6 +8,7 @@ import EventController from '../app/controller/EventController.mjs'
 import EventOrderController from '../app/controller/EventOrderController.mjs'
 import ParticipantController from '../app/controller/ParticipantController.mjs'
 import ProductRecommendController from '../app/controller/ProductRecommendController.mjs'
+import Order1688NoteController from '../app/controller/Order1688NoteController.mjs'
 
 api.get('/', (req, res) => {
     res.send('api')
@@ -47,5 +48,10 @@ api.post('/product-recommend', ProductRecommendController.store)
 api.get('/product-recommend/:id', ProductRecommendController.show)
 api.put('/product-recommend/:id', ProductRecommendController.update)
 api.delete('/product-recommend/:id', ProductRecommendController.destroy)
+
+api.get('/1688/notes', Order1688NoteController.index)
+api.post('/1688/notes', Order1688NoteController.store)
+api.get('/1688/notes/:id', Order1688NoteController.show)
+api.put('/1688/notes/:id', Order1688NoteController.update)
 
 export default api
