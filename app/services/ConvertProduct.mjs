@@ -62,7 +62,7 @@ class ConvertProduct extends TranslateService {
                 this.translateTitleCategory(`${this.masterData.subject} - ${firstCategory}`),
                 this.translateVariant(productResult)
             ])
-    
+
             if (translateAll[0]) {
                 const [title, cat] = translateAll[0].split(' - ')
                 productResult.subject.en = title
@@ -303,7 +303,9 @@ class ConvertProduct extends TranslateService {
             })
         } else if (params.variant_type === 'single_item') {
             arg.map((x, index) => {
-                params.variants[index].name_en = x
+                if(typeof params.variants[index] != 'undefined'){
+                    params.variants[index].name_en = x
+                }
             })
         }
 
