@@ -47,6 +47,7 @@ api.get('/product-recommend', ProductRecommendController.index)
 api.post('/product-recommend', ProductRecommendController.store)
 api.get('/product-recommend/:id', ProductRecommendController.show)
 api.put('/product-recommend/:id', ProductRecommendController.update)
+api.patch('/product-recommend/set-note/:id', ProductRecommendController.setNote)
 api.delete('/product-recommend/:id', ProductRecommendController.destroy)
 
 api.get('/1688/notes', Order1688NoteController.index)

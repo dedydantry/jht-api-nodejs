@@ -140,6 +140,25 @@ const ProductRecommendController = {
         }
     },
 
+    async setNote(req, res){
+        try {
+            const params = {
+                note: req.body.note
+            }
+
+            await ProductRecommend.updateOne({_id:req.params.id}, params, { upsert: true })
+            res.send({
+                status:true,
+                message:params
+            })
+        } catch (error) {
+            res.send({
+                status:false,
+                message:error.message
+            })
+        }
+    },
+
     async destroy(req, res){
         try {
             await ProductRecommend.deleteOne({_id:req.params.id})
