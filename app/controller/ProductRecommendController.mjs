@@ -8,7 +8,7 @@ const ProductRecommendController = {
     async index(req, res){
         try {
             let skip = 0;
-            let limit = req.query.limit ? req.query.limit : 15;
+            let limit = req.query.limit ? req.query.limit : 12;
 
             let page = req.query.page ? req.query.page : 1;
             skip = page === 1 ? 0 : (page - 1) * limit;
