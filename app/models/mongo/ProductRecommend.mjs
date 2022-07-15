@@ -9,6 +9,7 @@ const ProductRecommendSchema = new Schema({
     moq: Number,
     supplier: String,
     expired_at: Date,
+    status: {type: String, default: 'publish'},
     note: {type: String, default: null}
 }, {timestamps: {createdAt: 'created_at', updatedAt: 'updated_at'}})
 
