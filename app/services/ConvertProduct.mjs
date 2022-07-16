@@ -69,7 +69,7 @@ class ConvertProduct extends TranslateService {
                 productResult.category.name_en = cat
                 productResult.category.group[0].name_en = cat
             }
-    
+            
             productResult = this.appendVariant(productResult, translateAll[1])
 
         } catch (error) {
@@ -254,7 +254,7 @@ class ConvertProduct extends TranslateService {
     }
 
     async translateVariant (params) {
-        if (!params.variants.length) return params
+        if (!params.variants.length) return ''
 
         let variantString = ''
         if (params.variant_type == 'multiple_item') {
@@ -284,6 +284,7 @@ class ConvertProduct extends TranslateService {
     }
 
     appendVariant (params, arg) {
+        if(!arg) return params
         if (params.variant_type == 'multiple_item') {
             arg.map((x, index) => {
                 const [name, itemString] = x.split(' 7D7 ')
