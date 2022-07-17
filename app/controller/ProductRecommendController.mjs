@@ -217,7 +217,7 @@ const ProductRecommendController = {
 
             if(!product) return res.status(404).json({
                 status:false,
-                message:'Sorry, product not found'
+                message:'Maaf, produk tidak ditemukan'
             })
 
             const params = {
