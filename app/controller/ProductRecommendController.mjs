@@ -10,21 +10,21 @@ const ProductRecommendController = {
             let skip = 0;
             let limit = req.query.limit ? req.query.limit : 15;
 
-            const status = req.query.publish_status
+            const publish = req.query.publish
               ? {
-                  status: req.query.publish_status,
+                  publish_status: req.query.publish,
                 }
               : {}
-
+            
             let page = req.query.page ? req.query.page : 1;
             skip = page === 1 ? 0 : (page - 1) * limit;
       
-            const productsRecommend = await ProductRecommend.find({...status})
+            const productsRecommend = await ProductRecommend.find({...publish})
               .sort({ created_at: -1 })
               .skip(skip)
               .limit(limit);
 
-            const totalProduct = await ProductRecommend.find({...status}).count();
+            const totalProduct = await ProductRecommend.find({...publish}).count();
             let totalPage = totalProduct / limit;
       
             res.send({
