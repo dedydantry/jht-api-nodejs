@@ -8,11 +8,11 @@ const ProductRecommendController = {
     async index(req, res){
         try {
             let skip = 0;
-            let limit = req.query.limit ? req.query.limit : 12;
+            let limit = req.query.limit ? req.query.limit : 15;
 
-            const status = req.query.status
+            const status = req.query.publish_status
               ? {
-                  status: req.query.status,
+                  status: req.query.publish_status,
                 }
               : {}
 
@@ -194,6 +194,48 @@ const ProductRecommendController = {
             })
         }
     },
+
+    async publish(req, res){
+        try {
+            const validate = new Validator(req.body, {
+                publish_status: 'required',
+            }, 
+            { 
+                publish_status: 'Status request tidak boleh kosong',
+            })
+            const matched = await validate.check();
+            if(!matched) return res.status(400).json({
+                status:false,
+                message:errorValidations(validate.errors)
+            })
+
+            const product = await ProductRecommend.find({
+                $and: [
+                    { _id: {$ne: req.params.id} },
+                ]
+            }).exec()
+
+            if(!product) return res.status(404).json({
+                status:false,
+                message:'Sorry, product not found'
+            })
+
+            const params = {
+                publish_status: req.body.publish_status,
+            }
+
+            await ProductRecommend.updateOne({_id:req.params.id}, params,{ upsert: true })
+            return res.send({
+                status:true,
+                message:'Product successfully update'
+            })
+        } catch (error) {
+            return res.status(400).json({
+                status:false,
+                message:error.message,
+            })
+        }
+    }
 }
 
 export default ProductRecommendController
