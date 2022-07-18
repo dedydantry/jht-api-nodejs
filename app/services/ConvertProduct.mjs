@@ -15,6 +15,7 @@ class ConvertProduct extends TranslateService {
         const parentCategory = masterCategory
         const moq = this.masterData.saleInfo.minOrderQuantity !== 'undefined' ? this.masterData.saleInfo.minOrderQuantity : 0
         if(!moq) return false
+        const images = typeof this.masterData.image != 'undefined' ? this.masterData.image.images : []
         const variant = this.findVariant()
         let productResult =  {
             flag:1688,
@@ -27,7 +28,7 @@ class ConvertProduct extends TranslateService {
             prices:this.findPrice(),
             stock:typeof this.masterData.saleInfo.amountOnSale  !== 'undefined' ? this.masterData.saleInfo.amountOnSale : null,
             moq:moq,
-            images:this.masterData.image.images.map(x => `https://cbu01.alicdn.com/${x}`),
+            images:images.map(x => `https://cbu01.alicdn.com/${x}`),
             category:{
                 name_cn:firstCategory ,
                 name_en:'',
@@ -69,7 +70,7 @@ class ConvertProduct extends TranslateService {
                 productResult.category.name_en = cat
                 productResult.category.group[0].name_en = cat
             }
-    
+            
             productResult = this.appendVariant(productResult, translateAll[1])
 
         } catch (error) {
@@ -254,7 +255,7 @@ class ConvertProduct extends TranslateService {
     }
 
     async translateVariant (params) {
-        if (!params.variants.length) return params
+        if (!params.variants.length) return ''
 
         let variantString = ''
         if (params.variant_type == 'multiple_item') {
@@ -284,6 +285,7 @@ class ConvertProduct extends TranslateService {
     }
 
     appendVariant (params, arg) {
+        if(!arg) return params
         if (params.variant_type == 'multiple_item') {
             arg.map((x, index) => {
                 const [name, itemString] = x.split(' 7D7 ')
