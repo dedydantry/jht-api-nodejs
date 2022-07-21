@@ -5,7 +5,7 @@ import { format } from "date-fns";
 
 const EventController = {
   async index(req, res) {
-    const events = await Event.find({}).sort({ created_at: -1 });
+    const events = await Event.find({}, '-participants').sort({ created_at: -1 });
     res.send({
       status: true,
       data: events
@@ -137,7 +137,7 @@ const EventController = {
 
   async detail(req, res) {
     try {
-      const event = await Event.findById(req.params.id);
+      const event = await Event.findById(req.params.id)
       if (!event)
         return res.send({
           status: false,
