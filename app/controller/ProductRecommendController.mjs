@@ -15,16 +15,23 @@ const ProductRecommendController = {
                   publish_status: req.query.publish,
                 }
               : {}
+              
+            const keyword = req.query.keyword ?{
+               name: {
+                    $regex: req.query.keyword,
+                    $options: '-i'
+                  }
+                 } : {}
             
             let page = req.query.page ? req.query.page : 1;
             skip = page === 1 ? 0 : (page - 1) * limit;
       
-            const productsRecommend = await ProductRecommend.find({...publish})
+            const productsRecommend = await ProductRecommend.find({...publish, ...keyword})
               .sort({ created_at: -1 })
               .skip(skip)
               .limit(limit);
 
-            const totalProduct = await ProductRecommend.find({...publish}).count();
+            const totalProduct = await ProductRecommend.find({...publish, ...keyword}).count();
             let totalPage = totalProduct / limit;
       
             res.send({
